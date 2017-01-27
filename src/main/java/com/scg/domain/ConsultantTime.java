@@ -12,7 +12,7 @@ public final  class ConsultantTime {
     Account account;
     int hours;
     Skill skillType;
-    public void ConsultantTime (java.time.LocalDate date, Account account, Skill skillType, int hours)throws IllegalArgumentException {
+    public  ConsultantTime (java.time.LocalDate date, Account account, Skill skillType, int hours)throws IllegalArgumentException {
         this.date = date;
         this.account = account;
         this.skillType = skillType;
@@ -39,6 +39,10 @@ public final  class ConsultantTime {
         this.account = account;
     }
     public boolean isBillable(){
+        if((this.getAccount().isBillable())==true)
+        {return true;}
+        else
+        {return false;}
 
     }
     public int getHours(){
@@ -55,11 +59,8 @@ public final  class ConsultantTime {
     public Skill getSkill(){
         return skillType;
     }
-    public int hashCode(){
-        int hash =0;
-        return hash;
-    }
-    public boolean equals(Object obj){
+
+   /* public boolean equals(Object obj){
         boolean bool = false;
         final ConsultantTime other = (ConsultantTime) obj;
 
@@ -81,5 +82,5 @@ public final  class ConsultantTime {
         bldr.append( getHours() );
         bldr.append('"');
         return bldr.toString();
-    }
+    }*/
 }

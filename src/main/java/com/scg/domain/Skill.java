@@ -13,28 +13,12 @@ public enum Skill
     SYSTEM_ARCHITECT,
     UNKNOWN_SKILL;
 
+    int rate;
+    public int getRate(){
 
- /*   public static Skill[] values() {
-        Skill[] skillType;
-      //  Skill[] skillType = Skill.valueOf();
-        for (Skill c : Skill.values())
-
-            return skillType;
-        }*/
-
-        public static Skill valueOf(String name)throws IllegalArgumentException, NullPointerException {
-        if (name.equals(null)){
-            throw new NullPointerException();
-            }
-           if(Skill.valueOf()
-                }
-            }
-            throw new IllegalArgumentException();
+        return rate;
+    }
 
     }
-    public String toString() {
-        String str = "";
-        return str;
-    }
-    }
+
 

@@ -6,9 +6,9 @@ import com.scg.util.Name;
 public final class ClientAccount implements Account {
    String name;
     Name contactName;
-    public void ClientAccount(String name, Name contact){
+    public  ClientAccount(String name, Name contact){
         this. name = name;
-        this.contactName = contact;
+        this.contactName =contact;
     }
     public String getName(){
         return name;

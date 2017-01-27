@@ -38,14 +38,7 @@ public final class Name {
     public void setMiddleName(String middleName){
         this.middleName =middleName;
     }
-    public int hashCode(){
-        int hash =0;
-        return hash;
-    }
-    public boolean equals(Object other){
 
-        return true;
-    }
     public String toString(){
         StringBuilder bldr = new StringBuilder();
         bldr.append('"');
