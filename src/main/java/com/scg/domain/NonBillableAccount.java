@@ -9,9 +9,21 @@ public enum NonBillableAccount  implements Account {
     SICK_LEAVE ,
     VACATION ;
 
-    String accountName;
+
     public String getName(){
-        return accountName;
+        String s = "";
+        for (NonBillableAccount d: NonBillableAccount.values()) {
+            if(d.equals(BUSINESS_DEVELOPMENT)){
+                s= "Business Development";
+            }
+            if (d.equals(SICK_LEAVE)){
+                s= "Sick Leave";
+            }
+           if (d.equals(VACATION)){
+                s= "Vacation";
+            }
+        }
+        return s;
     }
     public boolean isBillable(){
         return false;

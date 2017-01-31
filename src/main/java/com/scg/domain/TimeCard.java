@@ -100,6 +100,25 @@ public final  class TimeCard {
     	return data.toString();
     }
 
+    public String printNonBillableHours(){
+        StringBuilder data = new StringBuilder();
+        for (ConsultantTime temp : consultantTimes) {
+            if (!temp.getAccount().isBillable()) {
+                String s = temp.getAccount().getName()
+                        + "\t"
+                        +temp.getDate()
+                        +"\t"
+                        +temp.getHours()
+                        +"\t"
+                        + temp.getSkill()
+                        +"\n";
+
+                data.append(s);
+            }
+        }
+        return data.toString();
+    }
+
     public String toReportString(){
     	String consultantName = this.getConsultant().getName().getLastName()+ " , " + this.getConsultant().getName().getFirstName() +" " + this.getConsultant().getName().getMiddleName();
 
@@ -109,10 +128,9 @@ public final  class TimeCard {
          		+ "Account\t\t\tDate\t\tHours\tSkill%n"
          		+ "----------------------  --------------  -----   --------------------%n"
          		+ "%s"
-         + "\nNon-Billable Time:\n"
+                + "\nNon-Billable Time:\n"
  		+ "Account\t\t\tDate\t\tHours\tSkill%n"
- 		+ "----------------------  --------------  -----   --------------------%n"
- 		
+ 		+ "----------------------  --------------  -----   --------------------%n" + "%s"
  		+"Summary:\n"
  		+"Total Billable Hours:\t\t\t %s %n"
  		+"Total Non-Billable Hours: \t\t %s %n"
@@ -121,7 +139,7 @@ public final  class TimeCard {
          
          DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
          String formattedString = this.getWeekStartingDay().format(formatter);
-         String s = String.format(format, consultantName, formattedString,printBillableHours(),this.getTotalBillableHours(), this.getTotalNonBillableHours(),this.getTotalHours());
+         String s = String.format(format, consultantName, formattedString,printBillableHours(),printNonBillableHours(),this.getTotalBillableHours(), this.getTotalNonBillableHours(),this.getTotalHours());
          return s;
     }
                
