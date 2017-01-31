@@ -27,26 +27,30 @@ public final  class TimeCard {
         return consultant;
     }
     public int getTotalBillableHours() {
+    	int totalBillableHours = 0;
         for (ConsultantTime temp : consultantTimes) {
             if (temp.getAccount().isBillable()) {
                 totalBillableHours += temp.getHours();
             }
-                    }
+        }
         return totalBillableHours;
     }
+    
     public int getTotalNonBillableHours() {
+    	int totalNonBillableHours = 0;
         for (ConsultantTime temp : consultantTimes) {
             if (!temp.getAccount().isBillable()) {
                 totalNonBillableHours += temp.getHours();
             }
-
         }
         return totalNonBillableHours;
     }
+    
     public List<ConsultantTime> getConsultingHours(){
 
         return consultantTimes;
     }
+    
     public void addConsultantTime(ConsultantTime consultantTime){
 
         consultantTimes.add(consultantTime);
@@ -77,21 +81,49 @@ public final  class TimeCard {
         bldr.append(getWeekStartingDay() );
         return bldr.toString();
     }
-    public String toReportString(){
-     /*  StringBuilder bldr = new StringBuilder();
-        bldr.append("====================================================================\n");
-        bldr.append("Consultant: ");
-        bldr.append(this.getConsultant().getName().getLastName()+ " , " + this.getConsultant().getName().getFirstName() +" " + this.getConsultant().getName().getMiddleName())
-        .append;*/
-        //String format = "%-40s%s%n";
-        String consultantName = this.getConsultant().getName().getLastName()+ " , " + this.getConsultant().getName().getFirstName() +" " + this.getConsultant().getName().getMiddleName();
-
-        //String date = getWeekStartingDay().format(DateTimeFormatter.ofPattern("MMM dd, uuuu"));
-        String format = "====================================================================%nConsultant: %1$%100Week Starting: %2$tb %2$te,%2$tY%n Billable Time:Account%40%20Hours%10%Skill%n---------------------------  ----------  -----  --------------------%nBillable Time:Account%40Date%20Hours%10%skill%n---------------------------  ----------  -----  --------------------%nSummary:Total Billable:%30%3$%nTotal Non-Billable:%30%4$%nTotal Hours:%30%5$%n====================================================================\n";
-        String s = String.format(format, consultantName, this.getWeekStartingDay(),this.getTotalBillableHours(), this.getTotalNonBillableHours(),this.getTotalHours());
-
-
-        return s;
+    public String printBillableHours(){
+    	StringBuilder data = new StringBuilder();  
+    	for (ConsultantTime temp : consultantTimes) {
+            if (temp.getAccount().isBillable()) {
+            	String s = temp.getAccount().getName()
+            			+ "\t"
+            			+temp.getDate()
+            			+"\t"
+            			+temp.getHours()
+            			+"\t"
+            			+ temp.getSkill()
+            			+"\n";
+            		     
+            	data.append(s);
+            }
+        }
+    	return data.toString();
     }
+
+    public String toReportString(){
+    	String consultantName = this.getConsultant().getName().getLastName()+ " , " + this.getConsultant().getName().getFirstName() +" " + this.getConsultant().getName().getMiddleName();
+
+        String format = "%n====================================================================%n"
+         		+ "Consultant: %s\t\t Week Starting: %s"
+         		+ "\nBillable Time:\n"
+         		+ "Account\t\t\tDate\t\tHours\tSkill%n"
+         		+ "----------------------  --------------  -----   --------------------%n"
+         		+ "%s"
+         + "\nNon-Billable Time:\n"
+ 		+ "Account\t\t\tDate\t\tHours\tSkill%n"
+ 		+ "----------------------  --------------  -----   --------------------%n"
+ 		
+ 		+"Summary:\n"
+ 		+"Total Billable Hours:\t\t\t %s %n"
+ 		+"Total Non-Billable Hours: \t\t %s %n"
+ 		+"Total Hours:  \t\t\t\t%s %n"
+         +"%n====================================================================%n";
+         
+         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+         String formattedString = this.getWeekStartingDay().format(formatter);
+         String s = String.format(format, consultantName, formattedString,printBillableHours(),this.getTotalBillableHours(), this.getTotalNonBillableHours(),this.getTotalHours());
+         return s;
+    }
+               
 
 }
