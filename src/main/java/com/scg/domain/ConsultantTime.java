@@ -36,6 +36,7 @@ public final  class ConsultantTime {
         return account;
     }
     public void setAccount(Account account){
+
         this.account = account;
     }
     public boolean isBillable(){

@@ -26,6 +26,7 @@ public final  class TimeCard {
     public Consultant getConsultant(){
         return consultant;
     }
+
     public int getTotalBillableHours() {
     	int totalBillableHours = 0;
         for (ConsultantTime temp : consultantTimes) {
@@ -73,14 +74,8 @@ public final  class TimeCard {
         }
         return billableHoursForClient;
     }
-    public String toString(){
-        StringBuilder bldr = new StringBuilder();
-        bldr.append('"');
-        bldr.append(getConsultant());
-        bldr.append(",");
-        bldr.append(getWeekStartingDay() );
-        return bldr.toString();
-    }
+
+
     public String printBillableHours(){
     	StringBuilder data = new StringBuilder();  
     	for (ConsultantTime temp : consultantTimes) {

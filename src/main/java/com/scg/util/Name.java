@@ -29,7 +29,7 @@ public final class Name {
     public String getLastName(){
         return lastName;
     }
-    public void setLastName(){
+    public void setLastName(String lastName){
         this.lastName = lastName;
     }
     public String getMiddleName(){
