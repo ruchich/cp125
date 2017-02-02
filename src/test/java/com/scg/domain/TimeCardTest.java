@@ -149,7 +149,24 @@ public class TimeCardTest {
 
 
     @Test
-    public void toReportString() throws Exception {
+    public void toReportString(){
+        int hours = 8;
+        Name name = new Name("Robin", "Singh","");
+        Consultant consultant = new Consultant(name);
+        LocalDate date = LocalDate.of(2017,01,20);
+        ClientAccount cAccount0 = new ClientAccount("XYZ Consultant", name);
+        ConsultantTime cTime = new ConsultantTime (date,cAccount0,Skill.SOFTWARE_ENGINEER, hours);
+        ClientAccount cAccount = new ClientAccount("ABC Consultant", name);
+        ConsultantTime cTime1 = new ConsultantTime (date, cAccount,Skill.SOFTWARE_ENGINEER, hours);
+        TimeCard tC = new TimeCard(consultant,date);
+        tC.addConsultantTime(cTime);
+        tC.addConsultantTime(cTime1);
+       String actual = tC.toReportString().trim();
+        String expected = String.format("====================================================================%nConsultant: Robin , Singh \t\t Week Starting: Jan 20, 2017%nBillable Time:%nAccount\t\t\tDate\t\tHours\tSkill%n----------------------  --------------  -----   --------------------%nXYZ Consultant\t01/20/2017\t8\tSOFTWARE_ENGINEER%nABC Consultant\t01/20/2017\t8\tSOFTWARE_ENGINEER%n%nNon-Billable Time:%nAccount\t\t\tDate\t\tHours\tSkill%n----------------------  --------------  -----   --------------------%nSummary:%nTotal Billable Hours:\t\t\t 16 %nTotal Non-Billable Hours: \t\t 0 %nTotal Hours:  \t\t\t\t16 %n%n====================================================================");
+        //String expected = String.format("%n====================================================================%nConsultant: Robin , Singh\t\t Week Starting: Jan 20, 2017%nBillable Time:%nAccount\t\t\tDate\t\tHours\tSkill%n----------------------  --------------  -----   --------------------%nXYZ Consultant\t01/20/2017\t8\tSOFTWARE_ENGINEER%nABC Consultant\t01/20/2017\t8\tSOFTWARE_ENGINEER%n%nNon-Billable Time:%nAccount\t\t\tDate\t\tHours\tSkill%n----------------------  --------------  -----   --------------------%nSummary:%nTotal Billable Hours:\t\t\t 16 %nTotal Non-Billable Hours: \t\t 0 %nTotal Hours:  \t\t\t\t16 %n%n====================================================================%n");
+        System.out.println(expected);
+        String expectedt = expected.trim();
+       assertEquals(expected,actual);
 
     }
 

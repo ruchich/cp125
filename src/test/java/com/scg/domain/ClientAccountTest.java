@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
  */
 public class ClientAccountTest {
     @Test
-    public void getName() throws Exception {
+    public void getName()  {
         Name contact = new Name("Robin", "Singh","");
 
         ClientAccount acc = new ClientAccount("XYZ Consultant",  contact);
@@ -20,7 +20,7 @@ public class ClientAccountTest {
     }
 
     @Test
-    public void getContact() throws Exception {
+    public void getContact() {
         Name contact = new Name("Singh","Robin", "");
         ClientAccount acc = new ClientAccount("XYZ Consultant",  contact);
         Name actualName = acc.getContact();
@@ -28,7 +28,7 @@ public class ClientAccountTest {
     }
 
     @Test
-    public void setContact() throws Exception {
+    public void setContact()  {
         Name contact = new Name("Singh","Robin", "");
         Name contact2 = new Name("Taneja","Ram", "J.");
         ClientAccount acc = new ClientAccount("XYZ Consultant",  contact);
@@ -38,7 +38,7 @@ public class ClientAccountTest {
     }
 
     @Test
-    public void isBillable() throws Exception {
+    public void isBillable() {
 
         Name contact = new Name("Singh","Robin", "");
         ClientAccount acc = new ClientAccount("XYZ Consultant",  contact);

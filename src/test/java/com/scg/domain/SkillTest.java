@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 public class SkillTest {
     @Test
     public void getRate() throws Exception {
-
+// Not yet implemented
     }
 
 }

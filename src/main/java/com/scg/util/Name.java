@@ -7,47 +7,50 @@ public final class Name {
     String lastName;
     String firstName;
     String middleName;
-    public Name(){
 
-    };
-    public Name(String lastName,String firstName,String middleName){
+    public Name() {
+
+    }
+
+    ;
+
+    public Name(String lastName, String firstName, String middleName) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.middleName = middleName;
-    };
-    public Name(String lastName,String firstName){
+    }
+
+    ;
+
+    public Name(String lastName, String firstName) {
         this.lastName = lastName;
         this.firstName = firstName;
+        this.middleName = "";
+    }
 
-    };
-    public String getFirstName(){
+    ;
+
+    public String getFirstName() {
         return firstName;
     }
-    public void setFirstName(String firstName){
+
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-    public String getLastName(){
+
+    public String getLastName() {
         return lastName;
     }
-    public void setLastName(String lastName){
+
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public String getMiddleName(){
+
+    public String getMiddleName() {
         return middleName;
     }
-    public void setMiddleName(String middleName){
-        this.middleName =middleName;
-    }
 
-    public String toString(){
-        StringBuilder bldr = new StringBuilder();
-        bldr.append('"');
-        bldr.append(lastName);
-        bldr.append(",");
-        bldr.append(firstName);
-        bldr.append(middleName);
-        bldr.append('"');
-        bldr.append(".");
-        return bldr.toString();
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 }

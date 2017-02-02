@@ -61,27 +61,5 @@ public final  class ConsultantTime {
         return skillType;
     }
 
-   /* public boolean equals(Object obj){
-        boolean bool = false;
-        final ConsultantTime other = (ConsultantTime) obj;
 
-        if( this.getAccount().equals(other.getAccount()) && this.getDate().equals(other.getDate()) && this.getSkill().equals(other.getSkill())&& this.getHours()== other.getHours()){
-            bool = true;
-        }
-
-        return bool;
-    }
-    public String toString(){
-        StringBuilder bldr = new StringBuilder();
-        bldr.append('"');
-        bldr.append(getDate());
-        bldr.append(",");
-        bldr.append(getAccount() );
-        bldr.append(",");
-        bldr.append(getSkill());
-        bldr.append(",");
-        bldr.append( getHours() );
-        bldr.append('"');
-        return bldr.toString();
-    }*/
 }

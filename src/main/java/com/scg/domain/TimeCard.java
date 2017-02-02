@@ -77,12 +77,13 @@ public final  class TimeCard {
 
 
     public String printBillableHours(){
-    	StringBuilder data = new StringBuilder();  
+    	StringBuilder data = new StringBuilder();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
     	for (ConsultantTime temp : consultantTimes) {
             if (temp.getAccount().isBillable()) {
             	String s = temp.getAccount().getName()
             			+ "\t"
-            			+temp.getDate()
+                        +temp.getDate().format(formatter)
             			+"\t"
             			+temp.getHours()
             			+"\t"
@@ -97,11 +98,12 @@ public final  class TimeCard {
 
     public String printNonBillableHours(){
         StringBuilder data = new StringBuilder();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         for (ConsultantTime temp : consultantTimes) {
             if (!temp.getAccount().isBillable()) {
                 String s = temp.getAccount().getName()
                         + "\t"
-                        +temp.getDate()
+                        +temp.getDate().format(formatter)
                         +"\t"
                         +temp.getHours()
                         +"\t"
@@ -135,7 +137,8 @@ public final  class TimeCard {
          DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
          String formattedString = this.getWeekStartingDay().format(formatter);
          String s = String.format(format, consultantName, formattedString,printBillableHours(),printNonBillableHours(),this.getTotalBillableHours(), this.getTotalNonBillableHours(),this.getTotalHours());
-         return s;
+         System.out.println(s);
+        return s;
     }
                
 

@@ -1,5 +1,7 @@
 package com.scg.domain;
 
+import com.scg.util.Name;
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -9,7 +11,12 @@ import static org.junit.Assert.*;
  */
 public class ConsultantTest {
     @Test
-    public void getName() throws Exception {
+    public void getName()  {
+        Name name = new Name("Robin", "Singh","");
+        Consultant consultant = new Consultant(name);
+        Name actual = consultant.getName();
+        Assert.assertEquals(name,actual);
+
 
     }
 

@@ -1,5 +1,7 @@
 package com.scg.domain;
 
+import com.scg.util.Name;
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -9,13 +11,18 @@ import static org.junit.Assert.*;
  */
 public class NonBillableAccountTest {
     @Test
-    public void getName() throws Exception {
+    public void getName()  {
+        NonBillableAccount acc =  NonBillableAccount.VACATION;
+        String actualName = acc.getName();
+        Assert.assertTrue("Vacation".equals(actualName));
 
     }
 
     @Test
-    public void isBillable() throws Exception {
+    public void isBillable()  {
 
+        NonBillableAccount acc =  NonBillableAccount.VACATION;
+       Assert.assertFalse(acc.isBillable());
     }
 
 }
