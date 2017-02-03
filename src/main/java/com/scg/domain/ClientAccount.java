@@ -1,4 +1,5 @@
 package com.scg.domain;
+import com.scg.util.Address;
 import com.scg.util.Name;
 /**
  * Created by chq-ruchic on 1/18/2017.
@@ -6,9 +7,11 @@ import com.scg.util.Name;
 public final class ClientAccount implements Account {
    String name;
     Name contactName;
-    public  ClientAccount(String name, Name contact){
+    Address address;
+    public  ClientAccount(String name, Name contact,  Address address){
         this. name = name;
         this.contactName =contact;
+        this.address = address;
     }
     public String getName(){
         return name;
@@ -22,6 +25,10 @@ public final class ClientAccount implements Account {
     public boolean isBillable(){
         return true;
     }
-
-
+    public Address getAddress(){
+        return address;
+    }
+    public void setAddress(Address address){
+        this.address = address;
+    }
 }
