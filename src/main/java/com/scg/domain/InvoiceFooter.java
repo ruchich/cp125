@@ -5,8 +5,8 @@ package com.scg.domain;
  */
 public class InvoiceFooter {
     String businessName;
-    int currentPageNumber ;
-    InvoiceFooter(String businessName){
+    int currentPageNumber=1 ;
+  public  InvoiceFooter(String businessName){
         this.businessName = businessName;
 
     }
