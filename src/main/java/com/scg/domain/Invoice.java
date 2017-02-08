@@ -2,6 +2,10 @@ package com.scg.domain;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.scg.util.ListFactory;
 
 /**
  * Created by chq-ruchic on 2/3/2017.
@@ -20,7 +24,8 @@ public final class Invoice {
     }
 
     public java.time.LocalDate getStartDate(){
-        LocalDate startDate;
+        // ConsultantTime cTime = new ConsultantTime();
+         LocalDate startDate ;
         return startDate;
 
     }
@@ -31,5 +36,13 @@ public final class Invoice {
 
     public ClientAccount getClientAccount(){
         return client;
+    }
+    public void addLineItem(InvoiceLineItem lineItem){
+    List<InvoiceLineItem>lineItems = new ArrayList();
+    lineItems.add(lineItem);
+        }
+    public void extractLineItems(TimeCard timeCard){
+    	List<InvoiceLineItem>extractLineItems = new ArrayList();
+    	if(timeCard.)
     }
 }
