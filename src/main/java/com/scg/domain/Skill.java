@@ -14,12 +14,25 @@ public enum Skill
     UNKNOWN_SKILL;
 
     int rate;
-    public int getRate(){
-
-        return rate;
+    public int getRate() {
+        for (Skill s : Skill.values()) {
+            if (s.equals(PROJECT_MANAGER)) {
+                rate = 250;
+            }
+            if (s.equals(SOFTWARE_ENGINEER)) {
+                rate = 200;
+            }
+            if (s.equals(SOFTWARE_TESTER)) {
+                rate = 150;
+            }
+            if (s.equals(SYSTEM_ARCHITECT)) {
+                rate = 100;
+            }
+        }
+            return rate;
+        }
     }
 
 
-}
 
 

@@ -11,7 +11,8 @@ public class InvoiceFooter {
 
     }
 
-   public void incrementPageNumber(){
+
+    public void incrementPageNumber(){
 
       currentPageNumber++;
 
