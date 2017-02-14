@@ -8,15 +8,20 @@ public class InvoiceLineItem {
     Consultant consultant;
     Skill skill;
     int hours;
+	private double charge;
 	
 	public InvoiceLineItem(java.time.LocalDate date,
             Consultant consultant,
             Skill skill,
             int hours){
+		if(hours<=0){throw new IllegalArgumentException("Invoiceline item requires hours>0");
+		
+		}
 		this.date = date;
 		this.consultant = consultant;
 		this.skill = skill;
 		this.hours = hours;
+		//this.charge = this.skill*this.hours;
 	}
 	
 /**	Get the consultant for this line item.

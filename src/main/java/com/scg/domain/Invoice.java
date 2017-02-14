@@ -46,9 +46,9 @@ public final class Invoice {
     StateCode state;
     String postalCode;
     Address invoiceHeaderAddress = new Address(streetNumber, city, state, postalCode);
-    InvoiceHeader invoiceheader = new InvoiceHeader(businessName, invoiceHeaderAddress, this.getClientAccount(), this.getStartDate(), java.time.LocalDate.from(this.getInvoiceMonth()));
+    InvoiceHeader invoiceheader = new InvoiceHeader(businessName, invoiceHeaderAddress, this.getClientAccount(), this.getStartDate(), java.time.LocalDate.now());
     InvoiceFooter invoiceFooter =  new InvoiceFooter(businessName);
-    private static Calendar cacheCalendar;
+   
     int month = invoiceMonth.getValue();
     List<InvoiceLineItem> lineItems = new ArrayList();
 
@@ -57,13 +57,8 @@ public final class Invoice {
         LocalDate startDate;
         int year = invoiceYear;
         int month = invoiceMonth.getValue();
-        Calendar cacheCalendar = Calendar.getInstance();
-        cacheCalendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        cacheCalendar.set(Calendar.DAY_OF_WEEK_IN_MONTH, 1);
-        cacheCalendar.set(Calendar.MONTH, month);
-        cacheCalendar.set(Calendar.YEAR, invoiceYear);
-        int weekStartdate = cacheCalendar.get(Calendar.DATE);
-        startDate = LocalDate.of(invoiceYear, month, weekStartdate);
+        
+        startDate = LocalDate.of(invoiceYear, month, 1);
 
         return startDate;
 
