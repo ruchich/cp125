@@ -1,5 +1,6 @@
 package com.scg.domain;
 
+import java.io.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
@@ -7,10 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -28,8 +25,12 @@ public final class Invoice {
     ClientAccount client;
     java.time.Month invoiceMonth = Month.MARCH;
     int invoiceYear = 2006;
-    String businessName;
-    String businessAddress;
+static String bizName;
+    static  Address bizAddress;
+    static  String bizStreet="";
+    static  String bizCity = "";
+    static  String bizState = "";
+    static  String bizZip = "";
 
 
     public Invoice(ClientAccount client,
@@ -40,14 +41,15 @@ public final class Invoice {
         this.invoiceYear = invoiceYear;
 
     }
+    private static String BUSINESS_NAME_PROP = "business.name";
+    private static String BUSINESS_STREET_PROP = "business.street";
+     private static String BUSINESS_CITY_PROP = "business.city";
+    private static String BUSINESS_State_PROP = "business.state";
+    private static String BUSINESS_POSTALCODE_PROP = "business.zip";
+    private static String NA = "";
 
-    String streetNumber;
-    String city;
-    StateCode state;
-    String postalCode;
-    Address invoiceHeaderAddress = new Address(streetNumber, city, state, postalCode);
-    InvoiceHeader invoiceheader = new InvoiceHeader(businessName, invoiceHeaderAddress, this.getClientAccount(), this.getStartDate(), java.time.LocalDate.now());
-    InvoiceFooter invoiceFooter =  new InvoiceFooter(businessName);
+   InvoiceHeader invoiceheader = new InvoiceHeader(bizName, bizAddress, this.getClientAccount(), this.getStartDate(), java.time.LocalDate.now());
+    InvoiceFooter invoiceFooter =  new InvoiceFooter(bizName);
    
     int month = invoiceMonth.getValue();
     List<InvoiceLineItem> lineItems = new ArrayList();
@@ -83,7 +85,8 @@ public final class Invoice {
         List<ConsultantTime> consultantTimes = timeCard.getConsultingHours();
 
         for (ConsultantTime temp : consultantTimes) {
-            if (temp.getAccount().getName().equals(this.getClientAccount())) {
+            String acc = temp.getAccount().getName();
+            if (acc.equals(this.getClientAccount().getName())) {
                 java.time.LocalDate ldate = temp.getDate();
                 Consultant lconsultant = timeCard.getConsultant();
                 Skill lskill = temp.getSkill();
@@ -105,87 +108,88 @@ public final class Invoice {
     public int getTotalCharges() {
         int totalCharges = 0;
         for (InvoiceLineItem item : lineItems) {
-            totalCharges += item.getHours();
+            totalCharges += item.getCharge();
         }
         return totalCharges;
     }
-
+    public String printHeader(){
+        String format = "%s %n"
+                +"%s %n%n"
+                +"Invoice for:\n"
+                +this.getClientAccount().toString()
+                +"\n" + "\n"
+                + "Invoice For Month of: " +this.getInvoiceMonth()+" " + this.invoiceYear
+                + "\nInvoice Date: " + this.getStartDate() + "\n"+ "\n"
+                + "Date\t\t\tConsultant\t\t\t\t\t\tSkill\t\t\tHours\t\tCharge%n"
+                + "----------  ---------------------------  ------------------   -----  ----------%n";
+        String s = String.format(format,invoiceheader.businessName.toString(),invoiceheader.businessAddress.toString());
+    return s;
+    }
     public String printLineItems() {
         StringBuilder data = new StringBuilder();
+        String s;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        for (InvoiceLineItem temp : lineItems) {
+         {
+                for(int i=0, line=1;i<lineItems.size();i++){
+                    for (InvoiceLineItem temp : lineItems) {
 
-            String s = temp.date.format(formatter)
-                    + "\t"
-                    + temp.getConsultant()
-                    + "\t"
-                    + temp.getSkill()
-                    + "\t"
-                    + temp.getHours()
-                    + "\t"
-                    + temp.getCharge()
-                    + "\n";
+                        if (line <= 5) {
+                                if(temp.date.getMonth())
+                            s = temp.date.format(formatter)
+                                    + "\t"
+                                    + temp.getConsultant()
+                                    + "\t\t\t\t"
+                                    + temp.getSkill()
+                                    + "\t\t"
+                                    + temp.getHours()
+                                    + "\t\t"
+                                    + temp.getCharge()
+                                    + "\n";
 
-            data.append(s);
+
+                        data.append(s);
+                    }
+                        else{
+                            s= invoiceFooter.printFooter();
+                            data.append(s);
+                            s= printHeader();
+                            data.append(s);
+                            line =1;
+                        }
+                    }
+                    }
 
         }
         return data.toString();
     }
 
-    public void readInvoicePropertiesFile() {
 
-        try {
-            File file = new File("invoice.properties");
-            FileInputStream fileInput = new FileInputStream(file);
-            Properties properties = new Properties();
-            properties.load(fileInput);
-            fileInput.close();
 
-            Enumeration enuKeys = properties.keys();
-            while (enuKeys.hasMoreElements()) {
-                String key = (String) enuKeys.nextElement();
-                String value = properties.getProperty(key);
-                if (key.equals("business.name")) {
-                    businessName = value;
-                } else if (key.equals("business.street")) {
-                    streetNumber = value;
-                } else if (key.equals("business.city")) {
-                    city = value;
-                } else if (key.equals("business.state")) {
-                    for (StateCode s : StateCode.values()) {
-                        if (s.equals(value)) {
-                            state = StateCode.valueOf(value);
-                        }
-                    }
-                } else if (key.equals("business.zip")) {
-                    postalCode = value;
-                }
+    static {
+       final Properties invoiceProps = new Properties();
 
+            try (InputStream in = Invoice.class.getResourceAsStream("/invoice.properties")) {
+                invoiceProps.load(in);
             }
 
-            } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+         catch (IOException e) {
             e.printStackTrace();
         }
+        bizName = invoiceProps.getProperty(BUSINESS_NAME_PROP,NA);
+        final String  bizStreet = invoiceProps.getProperty(BUSINESS_STREET_PROP,NA );
+        final String bizCity = invoiceProps.getProperty(BUSINESS_CITY_PROP, NA);
+        final String bizState = invoiceProps.getProperty(BUSINESS_State_PROP,NA);
+        final String bizZip = invoiceProps.getProperty(BUSINESS_POSTALCODE_PROP,NA);
+          bizAddress = new Address(bizStreet,bizCity,StateCode.valueOf(bizState),bizZip);
     }
     public String toReportString(){
 
-        String format = "%s %n"
-                +"%s %n"
-                +"Invoice for:\n"
-                +this.getClientAccount().getName().toString()
-                +"\n"+this.getClientAccount().getAddress()
-                +"\n" + this.getClientAccount().getContact()
-                + "Invoice For Month of: " +this.getInvoiceMonth()
-                + "\nInvoice Date: " + this.getStartDate()
-                + "Date\t\t\tConsultant\t\tSkill\tHours\tCharge%n"
-                + "----------  ---------------------------  ------------------   -----  ----------%n"
-                + "%s"
-                +"\nTotal:  \t\t\t\t%s\t\t%s %n"
-                +"%n====================================================================%n"
-        + invoiceFooter.printFooter();
-        String s = String.format(format,invoiceheader.businessName,invoiceheader.businessAddress,printLineItems(),this.getTotalHours(),this.getTotalCharges() );
+        String format ="%s"+
+                 "%s"
+                +"\nTotal: \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t%s\t\t%s %n%n"
+                + invoiceFooter.printFooter()
+                +"%n================================================================================%n";
+        String s = String.format(format,printHeader(),printLineItems(),this.getTotalHours(),this.getTotalCharges() );
         System.out.println(s);
         return s;
     }

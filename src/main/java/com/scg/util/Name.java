@@ -47,10 +47,24 @@ public final class Name {
     }
 
     public String getMiddleName() {
-        return middleName;
+        String s;
+        if(middleName==""){
+            s="NMN";
+        }
+        else{
+            s= middleName;
+        }
+
+        return s;
     }
 
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
+    }
+   @Override
+    public String toString() {
+        String format = "%s, %s %s";
+        String s=String.format(format,this.lastName,this.firstName,this.getMiddleName());
+        return s;
     }
 }

@@ -26,4 +26,9 @@ public final class Address {
     public StateCode getState(){
         return state;
     }
+    public String toString() {
+        String format = "%s%n%s, %s %s";
+        String s=String.format(format,this.getStreetNumber(),this.getCity(),this.getState(), this.getPostalCode());
+        return s;
+    }
 }

@@ -20,6 +20,5 @@ public final class InvoiceHeader {
 		this.businessAddress = businessAddress;
 		this.invoiceDate = invoiceDate;
 		this.invoiceForMonth = invoiceForMonth;
-
 	}
 }

@@ -31,4 +31,11 @@ public final class ClientAccount implements Account {
     public void setAddress(Address address){
         this.address = address;
     }
+
+    @Override
+    public String toString() {
+        String format = "%s%n%s%n%s";
+                String s=String.format(format,this.getName(),this.getAddress(),this.getContact());
+        return s;
+    }
 }

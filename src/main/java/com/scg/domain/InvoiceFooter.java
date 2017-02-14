@@ -11,7 +11,7 @@ public class InvoiceFooter {
 
     }
     public String printFooter(){
-        String s = this.businessName+"\t\t\t" + currentPageNumber;
+        String s = this.businessName+"\t\t\t\t\t\t\t\tPage:  " + currentPageNumber;
                 this.incrementPageNumber();
         return s;
     }

@@ -8,7 +8,7 @@ public class InvoiceLineItem {
     Consultant consultant;
     Skill skill;
     int hours;
-	private double charge;
+	//private double charge;
 	
 	public InvoiceLineItem(java.time.LocalDate date,
             Consultant consultant,
@@ -21,7 +21,7 @@ public class InvoiceLineItem {
 		this.consultant = consultant;
 		this.skill = skill;
 		this.hours = hours;
-		//this.charge = this.skill*this.hours;
+		//this.charge = this.skill.getRate()*this.hours;
 	}
 	
 /**	Get the consultant for this line item.
@@ -46,7 +46,7 @@ public class InvoiceLineItem {
 	 * @return the charge
 	 */
 	public int getCharge() {
-		int charge = hours*getSkill().getRate();
+		int charge = hours*this.getSkill().getRate();
 		return charge;
 	}
 
