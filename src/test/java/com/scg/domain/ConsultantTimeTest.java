@@ -1,6 +1,8 @@
 package com.scg.domain;
 
+import com.scg.util.Address;
 import com.scg.util.Name;
+import com.scg.util.StateCode;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -16,7 +18,8 @@ public class ConsultantTimeTest {
     Name name = new Name("Robin", "Singh","");
     Consultant consultant = new Consultant(name);
     LocalDate date = LocalDate.of(2017,01,20);
-    ClientAccount cAccount0 = new ClientAccount("XYZ Consultant", name);
+    Address address = new Address("1616 Index Ct.","Redmond", StateCode.WA ,"98055");
+    ClientAccount cAccount0 = new ClientAccount("XYZ Consultant", name, address);
     ConsultantTime cTime = new ConsultantTime (date,cAccount0, SOFTWARE_ENGINEER, hours);
     @Test
     public void getDate()  {
@@ -38,7 +41,7 @@ public class ConsultantTimeTest {
 
     @Test
     public void setAccount()  {
-        ClientAccount cAccount1= new ClientAccount("AAA Consultant", name);
+        ClientAccount cAccount1= new ClientAccount("AAA Consultant", name, address);
         cTime.setAccount(cAccount1);
         assertEquals(cAccount1, cTime.getAccount());
     }

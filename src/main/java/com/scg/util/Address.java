@@ -6,7 +6,7 @@ package com.scg.util;
 public final class Address {
     String streetNumber, city,  postalCode;
     StateCode state;
-    Address(String streetNumber, String city, StateCode state, String postalCode){
+    public Address(String streetNumber, String city, StateCode state, String postalCode){
         this.streetNumber = streetNumber;
         this.city = city;
         this.state= state;

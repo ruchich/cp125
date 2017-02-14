@@ -1,6 +1,8 @@
 package com.scg.domain;
 
+import com.scg.util.Address;
 import com.scg.util.Name;
+import com.scg.util.StateCode;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,6 +19,7 @@ import static org.junit.Assert.*;
  * Created by chq-ruchic on 2/1/2017.
  */
 public class TimeCardTest {
+    Address address = new Address("1616 Index Ct.","Redmond", StateCode.WA ,"98055");
     @Test
     public void getConsultant()  {
         Name name = new Name( "Smith","Carl","J.");
@@ -32,7 +35,7 @@ public class TimeCardTest {
         Name name = new Name("Robin", "Singh","");
         Consultant consultant = new Consultant(name);
         LocalDate date = LocalDate.of(2017,01,20);
-        ClientAccount cAccount = new ClientAccount("ABC Consultant", name);
+        ClientAccount cAccount = new ClientAccount("ABC Consultant", name,address);
         ConsultantTime cTime = new ConsultantTime (date, cAccount,Skill.SOFTWARE_ENGINEER, hours);
         TimeCard tC = new TimeCard(consultant,date);
         List<ConsultantTime> consultantTimes = new ArrayList<>();
@@ -63,7 +66,7 @@ public class TimeCardTest {
         Consultant consultant = new Consultant(name);
         LocalDate date = LocalDate.of(2017,01,20);
         ConsultantTime cTime = new ConsultantTime (date, NonBillableAccount.VACATION,Skill.SOFTWARE_ENGINEER, hours);
-        ClientAccount cAccount = new ClientAccount("ABC Consultant", name);
+        ClientAccount cAccount = new ClientAccount("ABC Consultant", name, address);
         ConsultantTime cTime1 = new ConsultantTime (date, cAccount,Skill.SOFTWARE_ENGINEER, hours);
         TimeCard tC = new TimeCard(consultant,date);
         tC.addConsultantTime(cTime);
@@ -83,7 +86,7 @@ public class TimeCardTest {
         Consultant consultant = new Consultant(name);
         LocalDate date = LocalDate.of(2017,01,20);
         ConsultantTime cTime = new ConsultantTime (date, NonBillableAccount.VACATION,Skill.SOFTWARE_ENGINEER, hours);
-        ClientAccount cAccount = new ClientAccount("ABC Consultant", name);
+        ClientAccount cAccount = new ClientAccount("ABC Consultant", name, address);
         ConsultantTime cTime1 = new ConsultantTime (date, cAccount,Skill.SOFTWARE_ENGINEER, hours);
         TimeCard tC = new TimeCard(consultant,date);
         tC.addConsultantTime(cTime);
@@ -104,7 +107,7 @@ public class TimeCardTest {
         Consultant consultant = new Consultant(name);
         LocalDate date = LocalDate.of(2017,01,20);
         ConsultantTime cTime = new ConsultantTime (date, NonBillableAccount.VACATION,Skill.SOFTWARE_ENGINEER, hours);
-        ClientAccount cAccount = new ClientAccount("ABC Consultant", name);
+        ClientAccount cAccount = new ClientAccount("ABC Consultant", name, address);
         ConsultantTime cTime1 = new ConsultantTime (date, cAccount,Skill.SOFTWARE_ENGINEER, hours);
         TimeCard tC = new TimeCard(consultant,date);
         tC.addConsultantTime(cTime);
@@ -131,9 +134,9 @@ public class TimeCardTest {
         Name name = new Name("Robin", "Singh","");
         Consultant consultant = new Consultant(name);
         LocalDate date = LocalDate.of(2017,01,20);
-        ClientAccount cAccount0 = new ClientAccount("XYZ Consultant", name);
+        ClientAccount cAccount0 = new ClientAccount("XYZ Consultant", name,address);
         ConsultantTime cTime = new ConsultantTime (date,cAccount0,Skill.SOFTWARE_ENGINEER, hours);
-        ClientAccount cAccount = new ClientAccount("ABC Consultant", name);
+        ClientAccount cAccount = new ClientAccount("ABC Consultant", name,address);
         ConsultantTime cTime1 = new ConsultantTime (date, cAccount,Skill.SOFTWARE_ENGINEER, hours);
         TimeCard tC = new TimeCard(consultant,date);
         tC.addConsultantTime(cTime);
@@ -154,9 +157,9 @@ public class TimeCardTest {
         Name name = new Name("Robin", "Singh","");
         Consultant consultant = new Consultant(name);
         LocalDate date = LocalDate.of(2017,01,20);
-        ClientAccount cAccount0 = new ClientAccount("XYZ Consultant", name);
+        ClientAccount cAccount0 = new ClientAccount("XYZ Consultant", name, address);
         ConsultantTime cTime = new ConsultantTime (date,cAccount0,Skill.SOFTWARE_ENGINEER, hours);
-        ClientAccount cAccount = new ClientAccount("ABC Consultant", name);
+        ClientAccount cAccount = new ClientAccount("ABC Consultant", name, address);
         ConsultantTime cTime1 = new ConsultantTime (date, cAccount,Skill.SOFTWARE_ENGINEER, hours);
         TimeCard tC = new TimeCard(consultant,date);
         tC.addConsultantTime(cTime);
