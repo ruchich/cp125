@@ -100,7 +100,10 @@ static String bizName;
     public int getTotalHours() {
         int totalHours = 0;
         for (InvoiceLineItem item : lineItems) {
-            totalHours += item.getHours();
+        	if (item.date.getMonth().equals(this.getInvoiceMonth()))
+        	{
+        		totalHours += item.getHours();
+        	}
         }
         return totalHours;
     }
@@ -108,7 +111,10 @@ static String bizName;
     public int getTotalCharges() {
         int totalCharges = 0;
         for (InvoiceLineItem item : lineItems) {
-            totalCharges += item.getCharge();
+        	if (item.date.getMonth().equals(this.getInvoiceMonth()))
+        	{
+        		totalCharges += item.getCharge();
+        	}
         }
         return totalCharges;
     }
@@ -125,43 +131,6 @@ static String bizName;
         String s = String.format(format,invoiceheader.businessName.toString(),invoiceheader.businessAddress.toString());
     return s;
     }
-    public String printLineItems() {
-        StringBuilder data = new StringBuilder();
-        String s;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-         {
-                for(int i=0, line=1;i<lineItems.size();i++){
-                    for (InvoiceLineItem temp : lineItems) {
-
-                        if (line <= 5) {
-                                if(temp.date.getMonth())
-                            s = temp.date.format(formatter)
-                                    + "\t"
-                                    + temp.getConsultant()
-                                    + "\t\t\t\t"
-                                    + temp.getSkill()
-                                    + "\t\t"
-                                    + temp.getHours()
-                                    + "\t\t"
-                                    + temp.getCharge()
-                                    + "\n";
-
-
-                        data.append(s);
-                    }
-                        else{
-                            s= invoiceFooter.printFooter();
-                            data.append(s);
-                            s= printHeader();
-                            data.append(s);
-                            line =1;
-                        }
-                    }
-                    }
-
-        }
-        return data.toString();
-    }
 
 
 
@@ -175,6 +144,7 @@ static String bizName;
          catch (IOException e) {
             e.printStackTrace();
         }
+            
         bizName = invoiceProps.getProperty(BUSINESS_NAME_PROP,NA);
         final String  bizStreet = invoiceProps.getProperty(BUSINESS_STREET_PROP,NA );
         final String bizCity = invoiceProps.getProperty(BUSINESS_CITY_PROP, NA);
@@ -187,10 +157,45 @@ static String bizName;
         String format ="%s"+
                  "%s"
                 +"\nTotal: \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t%s\t\t%s %n%n"
-                + invoiceFooter.printFooter()
-                +"%n================================================================================%n";
-        String s = String.format(format,printHeader(),printLineItems(),this.getTotalHours(),this.getTotalCharges() );
-        System.out.println(s);
-        return s;
+                + Invoice.bizName + "\t\t\t\t\t\t\t\tPage: %d"
+                +"\n================================================================================\n\n";
+        String formatContinuation ="%s"+
+                "%s"
+               +"%n%n"
+               + Invoice.bizName + "\t\t\t\t\t\t\t\tPage: %d"
+               +"\n================================================================================\n\n";
+        int pageNumer = 1;
+        StringBuilder pageData= new StringBuilder();
+        StringBuilder reportData= new StringBuilder();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        int validLineItemNo = 0;
+        for(int i=0 ;i < lineItems.size();i++){
+        	if (validLineItemNo > 0 && validLineItemNo % 5 == 0)
+        	{
+        		reportData.append(String.format(formatContinuation,printHeader(), pageData.toString(), pageNumer));   
+        		pageData.setLength(0);
+        		validLineItemNo = 0;
+        		pageNumer++;
+        	}
+        	if(lineItems.get(i).date.getMonth().equals(this.getInvoiceMonth()))
+        	{
+        		validLineItemNo++;
+	        	String s = lineItems.get(i).date.format(formatter)
+	                    + "\t"
+	                    + lineItems.get(i).getConsultant()
+	                    + "\t\t\t\t"
+	                    + lineItems.get(i).getSkill()
+	                    + "\t\t"
+	                    + lineItems.get(i).getHours()
+	                    + "\t\t"
+	                    + lineItems.get(i).getCharge()
+	                    + "\n";
+	        	pageData.append(s);
+        	}
+        }
+        
+        reportData.append(String.format(format,printHeader(), pageData.toString(), this.getTotalHours(),this.getTotalCharges(), pageNumer ));
+        
+        return reportData.toString();
     }
 }

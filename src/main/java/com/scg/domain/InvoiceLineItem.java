@@ -46,7 +46,7 @@ public class InvoiceLineItem {
 	 * @return the charge
 	 */
 	public int getCharge() {
-		int charge = hours*this.getSkill().getRate();
+		int charge = this.getHours() * this.getSkill().getRate();
 		return charge;
 	}
 
@@ -54,7 +54,7 @@ public class InvoiceLineItem {
 	 * @return the hours
 	 */
 	public int getHours() {
-		return hours;
+		return this.hours;
 	}
 	
 }
