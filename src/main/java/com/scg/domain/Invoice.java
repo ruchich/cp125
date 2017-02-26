@@ -1,36 +1,32 @@
 package com.scg.domain;
 
 import java.io.*;
-import java.time.DayOfWeek;
+
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
+
 import java.util.List;
-import java.util.Enumeration;
+
 import java.util.Properties;
 
 import com.scg.util.Address;
-import com.scg.util.ListFactory;
+
 import com.scg.util.StateCode;
 
-import static java.time.temporal.TemporalAdjusters.firstDayOfNextMonth;
-import static java.time.temporal.TemporalAdjusters.nextOrSame;
+
 
 /**
  * Created by chq-ruchic on 2/3/2017.
  */
 public final class Invoice {
-    ClientAccount client;
-    java.time.Month invoiceMonth = Month.MARCH;
-    int invoiceYear = 2006;
-static String bizName;
-    static  Address bizAddress;
-    static  String bizStreet="";
-    static  String bizCity = "";
-    static  String bizState = "";
-    static  String bizZip = "";
+    private ClientAccount client;
+    private java.time.Month invoiceMonth = Month.MARCH;
+    private int invoiceYear = 2006;
+    private static String bizName;
+    private static  Address bizAddress;
+
 
 
     public Invoice(ClientAccount client,
