@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by chq-ruchic on 1/23/2017.
  */
-public final  class TimeCard {
+public final  class TimeCard implements Comparable<TimeCard> {
     Consultant consultant;
     LocalDate weekStartingDay;
     int totalBillableHours;
@@ -26,7 +26,19 @@ public final  class TimeCard {
     public Consultant getConsultant(){
         return consultant;
     }
-
+public int compareTo(TimeCard o){
+	int result=0;
+	if(this!=o){ 
+		if((result = consultant.compareTo(o.consultant))==0)
+			if((result = weekStartingDay.compareTo(o.weekStartingDay))==0)
+				if((result =totalHours-o.totalHours) ==0)
+					if((result=totalBillableHours-o.totalBillableHours )==0)
+						if((result =totalNonBillableHours-o.totalNonBillableHours) ==0);
+		
+	}
+	return result;
+	
+}
     public int getTotalBillableHours() {
     	int totalBillableHours = 0;
         for (ConsultantTime temp : consultantTimes) {

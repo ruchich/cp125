@@ -23,13 +23,9 @@ public final class TimeCardConsultantComparator implements Comparator<TimeCard> 
  public int compare(TimeCard firstTimeCard,
          TimeCard secondTimeCard){
 	 int result =0;
-	 TimeCard firstTC = firstTimeCard;
-	 TimeCard secondTC = secondTimeCard;
-	 if(firstTimeCard>secondTimeCard){
-		 result = 1;
-	 }
-	 elseif 
-	 
-	 return result;
+	 if(firstTimeCard!=secondTimeCard ){
+		 result = firstTimeCard.compareTo(secondTimeCard);
+		}
+	 	 return result;
  }
 }

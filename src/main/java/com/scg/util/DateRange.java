@@ -1,5 +1,7 @@
 package com.scg.util;
 
+import java.time.LocalDate;
+
 /**
  * @author chq-ruchic
  * Encapsulates a range of two dates, inclusive of the start date and end date.
@@ -47,6 +49,16 @@ public final class DateRange {
 	public DateRange(java.time.Month month, int year) {
 		this.month = month;
 		this.year = year;
+		int day = 31;
+		
+		this.startDate = LocalDate.of(this.year, this.month, 1);
+		if (this.year % 4 == 0){
+		this.endDate = LocalDate.of(this.year, this.month, this.month.maxLength());
+		}
+		else
+		{
+			this.endDate = LocalDate.of(this.year, this.month, this.month.minLength());
+		}
 	}
 	
 	/**
@@ -80,7 +92,7 @@ public final class DateRange {
 	 */
 	public boolean isInRange(java.time.LocalDate date){
 		boolean result = false;
-		if(this.getStartDate().equals(date)||this.getStartDate().isBefore(date)&& this.getEndDate().equals(date)||this.getEndDate().isAfter(date))
+		if((this.getStartDate().equals(date) || this.getStartDate().isBefore(date)) && (this.getEndDate().equals(date)||this.getEndDate().isAfter(date)))
 				{result = true;}
 		return result;
 }

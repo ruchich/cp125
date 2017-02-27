@@ -1,10 +1,12 @@
 package com.scg.domain;
+import java.util.function.Function;
+
 import com.scg.util.Address;
 import com.scg.util.Name;
 /**
  * Created by chq-ruchic on 1/18/2017.
  */
-public final class ClientAccount implements Account {
+public final class ClientAccount implements Account, Comparable<ClientAccount>  {
    String name;
     Name contactName;
     Address address;
@@ -38,4 +40,20 @@ public final class ClientAccount implements Account {
                 String s=String.format(format,this.getName(),this.getAddress(),this.getContact());
         return s;
     }
+	@Override
+	public int compareTo(ClientAccount o) {
+		int result = 0;
+		if (this!=o){
+		result = this.getName().compareTo(o.getName());
+				if(result==0){
+			result= this.getContact().toString().compareTo(o.getContact().toString());
+		}
+				if(result==0){
+					result= this.getAddress().toString().compareTo(o.getAddress().toString());
+				}
+				
+		
+		}
+		return result;
+}
 }

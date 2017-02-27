@@ -3,8 +3,12 @@
 package com.scg.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.scg.domain.Consultant;
 import com.scg.domain.TimeCard;
@@ -21,15 +25,11 @@ public final class TimeCardListUtil {
 	 * @return a list of TimeCards for the specified consultant.
 	 */
 	public static List<TimeCard> getTimeCardsForConsultant(List<TimeCard> timeCards, Consultant consultant)  {
-		List<TimeCard> tc = timeCards;
-		Consultant con = consultant;
-		List<TimeCard> timeCardsForConsultant = new ArrayList();
-		for(TimeCard temp: tc){
-			if(temp.equals(con))
-				timeCardsForConsultant.add(temp);	
-		}
+		Stream<TimeCard> s = timeCards.stream(); 
+		List<TimeCard> timeCardsForConsultant;
+		timeCardsForConsultant = s.filter(t -> t.getConsultant().getName().equals(consultant.getName())).collect(Collectors.toList());
 		return timeCardsForConsultant;
-	}
+		}
 	/**
 	 * Get a list of TimeCards that cover dates that fall within a date range.
 	 * @param timeCards - the list of time cards to extract the sub set from
@@ -37,13 +37,9 @@ public final class TimeCardListUtil {
 	 * @return a list of TimeCards having dates fall within the date range.
 	 */
 	public static List<TimeCard> getTimeCardsForDateRange(List<TimeCard> timeCards, DateRange dateRange)  {
-		List<TimeCard> tc = timeCards;
-		DateRange dateRange1= dateRange;
-		List<TimeCard> timeCardsForDateRange = new ArrayList();
-		for(TimeCard temp: tc){
-			if(dateRange1.isInRange(temp.getWeekStartingDay()))
-				timeCardsForDateRange.add(temp);	
-		}
+		Stream<TimeCard> s = timeCards.stream(); 
+		List<TimeCard> timeCardsForDateRange ;
+		timeCardsForDateRange = s.filter(t -> dateRange.isInRange(t.getWeekStartingDay())).collect(Collectors.toList());
 		return timeCardsForDateRange;
 	}
 	/**
@@ -53,18 +49,16 @@ public final class TimeCardListUtil {
 	 */
 	
 	public static void sortByConsultantName(List<TimeCard> timeCards)  {
-		List<TimeCard> tc = timeCards;
-		List<TimeCard> timeCardstemp = new ArrayList();
-		for(TimeCard temp: tc){
-			tc.sort((Comparator<? super TimeCard>) temp.getConsultant());
+			timeCards.sort((t1,t2 )-> t1.getConsultant().compareTo(t2.getConsultant()));
+		
 		}
-	}
+	
 	/**
 	 * Sorts this list into ascending order, by the start date.
 	 * @param timeCards - the list of time cards to sort
 	 * 
 	 */
 	public static void sortByStartDate(List<TimeCard> timeCards)  {
-		
+		timeCards.sort((t1,t2 )-> t1.getWeekStartingDay().compareTo(t2.getWeekStartingDay()));
 	}
 }
