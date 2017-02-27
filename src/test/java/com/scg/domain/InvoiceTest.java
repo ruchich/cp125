@@ -74,19 +74,7 @@ public class InvoiceTest {
         assertEquals(2400,actualCharge );
     }
 
-    @Test
-    public void extractLineItems() throws Exception {
-        tC.addConsultantTime(cTime);
-        invoice.extractLineItems(tC);
-        actualLineItems = invoice.lineItems;
-        expectedLineItems.add(lineItem);
-         for(int i=0;i<actualLineItems.size();i++){
-            assertEquals(expectedLineItems.get(i).date,actualLineItems.get(i).date);
-            assertEquals(expectedLineItems.get(i).consultant,actualLineItems.get(i).consultant);
-            assertEquals(expectedLineItems.get(i).skill,actualLineItems.get(i).skill);
-            assertEquals(expectedLineItems.get(i).hours,actualLineItems.get(i).hours);
-        }
+   
     }
 
 
-}

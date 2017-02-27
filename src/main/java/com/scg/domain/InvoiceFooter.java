@@ -1,25 +1,44 @@
 package com.scg.domain;
 
-/**
- * Created by chq-ruchic on 2/3/2017.
- */
-public class InvoiceFooter {
-    String businessName;
-    int currentPageNumber=1 ;
-  public  InvoiceFooter(String businessName){
+import java.util.Locale;
+
+final class InvoiceFooter {
+    /** Page break. */
+    private static final String PAGE_BREAK =
+        "===============================================================================";
+
+    /**  The page number. */
+    private int pageNumber;
+
+    /** Business name. */
+    private String businessName;
+
+
+    /**
+     * Construct an InvoiceFooter.
+     *
+     * @param businessName name of buisness to include in footer
+     */
+    public InvoiceFooter(final String businessName) {
         this.businessName = businessName;
-
-    }
-    public String printFooter(){
-        String s = this.businessName+"\t\t\t\t\t\t\t\tPage:  " + currentPageNumber;
-                this.incrementPageNumber();
-        return s;
     }
 
-    public void incrementPageNumber(){
+    /**
+     * Increment the current page number by one.
+     */
+    public void incrementPageNumber() {
+        pageNumber++;
+    }
 
-      currentPageNumber++;
+    /**
+     * Print the formatted footer.
+     *
+     * @return Formatted footer string.
+     */
+    @Override
+    public String toString() {
+        return String.format(Locale.US, "%n%n%n%-69s Page: %3d%n%s%n",
+                             businessName, pageNumber, PAGE_BREAK);
+    }
 
-
-   }
 }

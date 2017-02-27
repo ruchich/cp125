@@ -5,13 +5,45 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Formatter;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by chq-ruchic on 1/23/2017.
  */
 public final  class TimeCard implements Comparable<TimeCard> {
+	  /** Format string for the time card header. */
+    private static final String HEADER_FORMAT = "Consultant: %-28s Week Starting: %2$tb %2$td, %2$tY%n";
+
+    /** Format string for the time card string representation. */
+    private static final String TO_STRING_FORMAT = "TimeCard for: %s, Week Starting: %2$tb %2$td, %2$tY%n";
+
+    /** Format string for a line header on the time card. */
+    private static final String LINE_HEADER_FORMAT = String.format("%-28s %-10s  %5s  %s%n"
+        + "---------------------------  ----------  -----  --------------------%n",
+        "Account", "Date", "Hours", "Skill");
+
+    /** A border for the time card */
+    private static final String CARD_BORDER = "====================================================================%n";
+
+    /** Format string for a line on the time card. */
+    private static final String LINE_FORMAT = "%-28s %2$tm/%2$td/%2$tY  %3$5d  %4$s%n";
+
+    /** Format string for a summary line on the time card. */
+    private static final String SUMMARY_LINE_FORMAT = "%-39s  %5d%n";
+
+    /** Format string for the billable time section header on the time card. */
+    private static final String BILLABLE_TIME_HEADER_FORMAT = "%nBillable Time:%n";
+
+    /** Format string for the non-billable time section header on the time card. */
+    private static final String NON_BILLABLE_TIME_HEADER_FORMAT = "%nNon-billable Time:%n";
+
+    /** Format string for the summary section header on the time card. */
+    private static final String SUMMARY_HEADER_FORMAT = "%nSummary:%n";
     Consultant consultant;
     LocalDate weekStartingDay;
     int totalBillableHours;
@@ -76,7 +108,7 @@ public int compareTo(TimeCard o){
     public java.time.LocalDate getWeekStartingDay(){
         return weekStartingDay;
     }
-    public List<ConsultantTime> getBillableHoursForClient(String clientName) {
+ /**   public List<ConsultantTime> getBillableHoursForClient(String clientName) {
         List<ConsultantTime> billableHoursForClient = new ArrayList<>();
 
         for (ConsultantTime temp : consultantTimes) {
@@ -85,9 +117,17 @@ public int compareTo(TimeCard o){
             }
         }
         return billableHoursForClient;
-    }
+    }**/
 
+    public List<ConsultantTime> getBillableHoursForClient(String clientName) {
 
+        Stream<ConsultantTime> s = consultantTimes.stream();
+        List<ConsultantTime> billableHoursForClient= s.filter(t -> t.getAccount().getName().equals(clientName)).collect(Collectors.toList());
+         return billableHoursForClient;
+ 		
+ 		    }
+        
+        
     public String printBillableHours(){
     	StringBuilder data = new StringBuilder();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
@@ -128,30 +168,66 @@ public int compareTo(TimeCard o){
         return data.toString();
     }
 
-    public String toReportString(){
-    	String consultantName = this.getConsultant().getName().getLastName()+ " , " + this.getConsultant().getName().getFirstName() +" " + this.getConsultant().getName().getMiddleName();
+    /**
+     * Add the consulting hours lines to the invoice.
+     *
+     * @param formatter the formatter to add the lines to
+     * @param hours the list of consulting hours
+     * @param billable if true billable hours will be added otherwise non-billable
+     */
+    private void appendTime(final Formatter formatter, final List<ConsultantTime> hours,
+                            final boolean billable) {
+        for (final ConsultantTime currentTime : hours) {
+            if (currentTime.isBillable() == billable) {
+                formatter.format(LINE_FORMAT, currentTime.getAccount().getName(),
+                                              currentTime.getDate(),
+                                              currentTime.getHours(),
+                                              currentTime.getSkill());
+            }
+        }
+    }
 
-        String format = "%n====================================================================%n"
-         		+ "Consultant: %s\t\t Week Starting: %s"
-         		+ "\nBillable Time:\n"
-         		+ "Account\t\t\tDate\t\tHours\tSkill%n"
-         		+ "----------------------  --------------  -----   --------------------%n"
-         		+ "%s"
-                + "\nNon-Billable Time:\n"
- 		+ "Account\t\t\tDate\t\tHours\tSkill%n"
- 		+ "----------------------  --------------  -----   --------------------%n" + "%s"
- 		+"Summary:\n"
- 		+"Total Billable Hours:\t\t\t %s %n"
- 		+"Total Non-Billable Hours: \t\t %s %n"
- 		+"Total Hours:  \t\t\t\t%s %n"
-         +"%n====================================================================%n";
-         
-         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
-         String formattedString = this.getWeekStartingDay().format(formatter);
-         String s = String.format(format, consultantName, formattedString,printBillableHours(),printNonBillableHours(),this.getTotalBillableHours(), this.getTotalNonBillableHours(),this.getTotalHours());
-         System.out.println(s);
+    /**
+     * Create a string representation of this object, consisting of the
+     * consultant name and the time card week starting day.
+     *
+     * @return a string containing the consultant name and the time card week starting day
+     */
+    @Override
+    public String toString() {
+        return String.format(TO_STRING_FORMAT, consultant.getName(), weekStartingDay);
+    }
+
+    /**
+     * Create a string representation of this object, suitable for printing the
+     * entire time card.
+     *
+     * @return this TimeCard as a formatted String.
+     */
+    public String toReportString() {
+        final StringBuilder sb = new StringBuilder();
+        final Formatter formatter = new Formatter(sb, Locale.US);
+        // Put on a header.
+        formatter.format(CARD_BORDER)
+                 .format(HEADER_FORMAT, consultant.getName(), weekStartingDay)
+                 .format(BILLABLE_TIME_HEADER_FORMAT)
+                 .format(LINE_HEADER_FORMAT);
+
+        appendTime(formatter, consultantTimes, true);
+
+        formatter.format(NON_BILLABLE_TIME_HEADER_FORMAT)
+                 .format(LINE_HEADER_FORMAT);
+
+        appendTime(formatter, consultantTimes, false);
+
+        formatter.format(SUMMARY_HEADER_FORMAT)
+                 .format(SUMMARY_LINE_FORMAT, "Total Billable:", totalBillableHours)
+                 .format(SUMMARY_LINE_FORMAT, "Total Non-Billable:", totalNonBillableHours)
+                 .format(SUMMARY_LINE_FORMAT, "Total Hours:", totalBillableHours + totalNonBillableHours)
+                 .format(CARD_BORDER);
+
+        final String s = formatter.toString();
+        formatter.close();
         return s;
     }
-               
-
 }

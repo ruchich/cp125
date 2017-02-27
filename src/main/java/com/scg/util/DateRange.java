@@ -49,7 +49,7 @@ public final class DateRange {
 	public DateRange(java.time.Month month, int year) {
 		this.month = month;
 		this.year = year;
-		int day = 31;
+	//	int day = 31;
 		
 		this.startDate = LocalDate.of(this.year, this.month, 1);
 		if (this.year % 4 == 0){
