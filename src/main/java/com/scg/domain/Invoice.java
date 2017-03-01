@@ -9,6 +9,8 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -185,17 +187,12 @@ public final class Invoice {
      */
     public void extractLineItems(final TimeCard timeCard) {
         final List<ConsultantTime> billableHoursList = timeCard.getBillableHoursForClient(client.getName());
-        for (final ConsultantTime consultantTime : billableHoursList) {
-            final LocalDate currentDate = consultantTime.getDate();
-            if (currentDate.getMonth() == startDate.getMonth()) {
-                final InvoiceLineItem currentItem = new InvoiceLineItem(
-                        currentDate,
-                        timeCard.getConsultant(),
-                        consultantTime.getSkill(),
-                        consultantTime.getHours());
-                addLineItem(currentItem);
-            }
-        }
+        Stream<ConsultantTime> s = billableHoursList.stream();
+        s.filter(x -> x.getDate().getMonth() == startDate.getMonth()).map(x -> new InvoiceLineItem(
+                x.getDate(),
+                timeCard.getConsultant(),
+                x.getSkill(),
+                x.getHours())).forEach(x -> addLineItem(x));
     }
 
     /**
