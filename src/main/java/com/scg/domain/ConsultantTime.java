@@ -1,12 +1,13 @@
 package com.scg.domain;
 
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
  * Created by chq-ruchic on 1/19/2017.
  */
-public final  class ConsultantTime {
+public final  class ConsultantTime implements Serializable{
 
     LocalDate date;
     Account account;

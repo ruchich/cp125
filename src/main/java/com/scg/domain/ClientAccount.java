@@ -1,4 +1,5 @@
 package com.scg.domain;
+import java.io.Serializable;
 import java.util.function.Function;
 
 import com.scg.util.Address;
@@ -6,7 +7,7 @@ import com.scg.util.Name;
 /**
  * Created by chq-ruchic on 1/18/2017.
  */
-public final class ClientAccount implements Account, Comparable<ClientAccount>  {
+public final class ClientAccount implements Account, Comparable<ClientAccount>,Serializable  {
    String name;
     Name contactName;
     Address address;

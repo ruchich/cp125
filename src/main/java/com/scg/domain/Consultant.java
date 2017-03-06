@@ -1,9 +1,11 @@
 package com.scg.domain;
+import java.io.Serializable;
+
 import com.scg.util.Name;
 /**
  * Created by chq-ruchic on 1/19/2017.
  */
-public class Consultant implements Comparable<Consultant> {
+public class Consultant implements Comparable<Consultant>,Serializable {
         Name name;
     public Consultant(Name name){
         this.name = name;

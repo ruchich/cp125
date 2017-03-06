@@ -1,9 +1,11 @@
 package com.scg.util;
 
+import java.io.Serializable;
+
 /**
  * Created by chq-ruchic on 1/18/2017.
  */
-public final class Name {
+public final class Name implements Serializable{
     String lastName;
     String firstName;
     String middleName;

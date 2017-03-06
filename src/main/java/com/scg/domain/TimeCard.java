@@ -1,6 +1,7 @@
 package com.scg.domain;
 
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.stream.Stream;
 /**
  * Created by chq-ruchic on 1/23/2017.
  */
-public final  class TimeCard implements Comparable<TimeCard> {
+public final  class TimeCard implements Comparable<TimeCard>,Serializable {
 	  /** Format string for the time card header. */
     private static final String HEADER_FORMAT = "Consultant: %-28s Week Starting: %2$tb %2$td, %2$tY%n";
 

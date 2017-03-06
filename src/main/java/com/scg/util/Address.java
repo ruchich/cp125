@@ -1,9 +1,11 @@
 package com.scg.util;
 
+import java.io.Serializable;
+
 /**
  * Created by chq-ruchic on 2/3/2017.
  */
-public final class Address {
+public final class Address implements Serializable{
     String streetNumber, city,  postalCode;
     StateCode state;
     public Address(String streetNumber, String city, StateCode state, String postalCode){

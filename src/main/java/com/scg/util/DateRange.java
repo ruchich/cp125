@@ -1,12 +1,13 @@
 package com.scg.util;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
  * @author chq-ruchic
  * Encapsulates a range of two dates, inclusive of the start date and end date.
  */
-public final class DateRange {
+public final class DateRange implements Serializable {
 	/**
 	 * the start date for a DateRange
 	 */
