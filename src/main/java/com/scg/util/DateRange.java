@@ -34,8 +34,8 @@ public final class DateRange implements Serializable {
 	private String end;
 	/**
 	 * Construct a DateRange given two dates.
-	 * @param java.time.LocalDate startDate - the start date for this DateRange.
-	 * @param java.time.LocalDate endDate the end date for this DateRange.
+	 * @param startDate - the start date for this DateRange.
+	 * @param  endDate the end date for this DateRange.
 	 */
 	public DateRange(java.time.LocalDate startDate, java.time.LocalDate endDate) {
 		this.startDate = startDate;
@@ -44,8 +44,8 @@ public final class DateRange implements Serializable {
 	}
 	/**
 	 * Construct a DateRange given month.
-	 * @param java.time.Month month- the month for which this DateRange should be constructed.
-	 * @param int year the calendar year
+	 * @param  month- the month for which this DateRange should be constructed.
+	 * @param  year the calendar year
 	 */
 	public DateRange(java.time.Month month, int year) {
 		this.month = month;
@@ -64,8 +64,8 @@ public final class DateRange implements Serializable {
 	
 	/**
 	 * Construct a DateRange given two date strings in the correct format.
-	 * @param String start - String representing the start date, of the form yyyy-MM-dd.
-	 * @param String end - String representing the end date, of the form yyyy-MM-dd.
+	 * @param  start - String representing the start date, of the form yyyy-MM-dd.
+	 * @param  end - String representing the end date, of the form yyyy-MM-dd.
 	 */
 	
 	public DateRange(String start, String end) {
