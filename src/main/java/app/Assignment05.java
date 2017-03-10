@@ -26,7 +26,9 @@ public final class Assignment05 {
     private static final int INVOICE_YEAR = 2006;
 
     /** This class' logger. */
-    private static final Logger log = LoggerFactory.getLogger("Assignment04");
+    private static final Logger log = LoggerFactory.getLogger("Assignment05");
+    private static 	List<ClientAccount> accounts= new ArrayList<ClientAccount>();
+    private static List<TimeCard> timeCards = new ArrayList<TimeCard>();
 	/**
      * Create invoices for the clients from the timecards.
      *
@@ -65,29 +67,9 @@ public final class Assignment05 {
 
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		List<ClientAccount> accounts= new ArrayList<ClientAccount>();
-		List<TimeCard> timeCards = new ArrayList<TimeCard>();
-		 try { 
-			 ObjectInputStream in = new ObjectInputStream(new FileInputStream("ClientList.ser")); 
-			  accounts =( List<ClientAccount>) in.readObject();
-		 in.close();
-		 }
-		 catch(ClassNotFoundException ex) { ex.printStackTrace();
-		 }
-		 catch(IOException ex) { 
-			 ex.printStackTrace(); 
-		 }
-		 try { 
-			 ObjectInputStream in = new ObjectInputStream(new FileInputStream("TimeCardList.ser")); 
-			  timeCards =( List<TimeCard>) in.readObject();
-		 in.close();
-		 }
-		 catch(ClassNotFoundException ex) { ex.printStackTrace();
-		 }
-		 catch(IOException ex) { 
-			 ex.printStackTrace(); 
-		 }
+		//De-Serialize Clients and timecards list from ClientList.ser and Timecard.ser
+        deSerializeLists();
+
 		// Create the Invoices
 	        final List<Invoice> invoices = createInvoices(accounts, timeCards);
 	        // Print them
@@ -106,8 +88,32 @@ public final class Assignment05 {
 	           // Logger.error("Unable to print invoice.", ex);
 	        }
 	    }
-	
+	/**
+	 * De-Serialize the Client and Time card lists.
+	 */
+private static void deSerializeLists(){
 
+	try {
+		ObjectInputStream in = new ObjectInputStream(new FileInputStream("ClientList.ser"));
+		accounts =( List<ClientAccount>) in.readObject();
+		in.close();
+	}
+	catch(ClassNotFoundException ex) { ex.printStackTrace();
+	}
+	catch(IOException ex) {
+		ex.printStackTrace();
+	}
+	try {
+		ObjectInputStream in = new ObjectInputStream(new FileInputStream("TimeCardList.ser"));
+		timeCards =( List<TimeCard>) in.readObject();
+		in.close();
+	}
+	catch(ClassNotFoundException ex) { ex.printStackTrace();
+	}
+	catch(IOException ex) {
+		ex.printStackTrace();
+	}
+}
 
 
 	}

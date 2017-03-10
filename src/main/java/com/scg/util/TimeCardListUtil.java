@@ -18,6 +18,8 @@ import com.scg.domain.TimeCard;
  *
  */
 public final class TimeCardListUtil {
+	/** Days per week. */
+	private static final int DAYS_PER_WEEK = 6; // This is actually days per week - 1
 	/**
 	 * Get a list of TimeCards for the specified consultant.
 	 * @param timeCards - the list of time cards to extract the sub set from
@@ -39,7 +41,8 @@ public final class TimeCardListUtil {
 	public static List<TimeCard> getTimeCardsForDateRange(List<TimeCard> timeCards, DateRange dateRange)  {
 		Stream<TimeCard> s = timeCards.stream(); 
 		List<TimeCard> timeCardsForDateRange ;
-		timeCardsForDateRange = s.filter(t -> dateRange.isInRange(t.getWeekStartingDay())).collect(Collectors.toList());
+		timeCardsForDateRange = s.filter(t ->dateRange.isInRange(t.getWeekStartingDay()) ||
+				dateRange.isInRange(t.getWeekStartingDay().plusDays(DAYS_PER_WEEK))).collect(Collectors.toList());
 		return timeCardsForDateRange;
 	}
 	/**

@@ -32,7 +32,7 @@ public class Consultant implements Comparable<Consultant>,Serializable {
     	return result;
 	}
     private Object writeReplace() {
-    	final String	msg = String.format("Sralizing consultant: %s",  getName());
+    	final String	msg = String.format("Serializing consultant:  %s",  getName());
     	log.info(msg);
         return new SerializationProxy(this);
     }
