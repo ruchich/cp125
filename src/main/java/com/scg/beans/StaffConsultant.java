@@ -1,4 +1,4 @@
-package com.scg.domain;
+package com.scg.beans;
 
 import com.scg.util.Name;
 
@@ -11,7 +11,8 @@ import java.io.Serializable;
  * A consultant who is kept on staff (receives benefits).
  */
 public class StaffConsultant extends Consultant implements Serializable {
-    /** Pay rate property name. */
+    
+	/** Pay rate property name. */
   private static String PAY_RATE_PROPERTY_NAME;
     /** Sick Leave property name. */
     private static String SICK_LEAVE_HOURS_PROPERTY_NAME;
@@ -24,7 +25,7 @@ public class StaffConsultant extends Consultant implements Serializable {
 
     /**Creates a new instance of StaffConsultant.*/
     public void StaffConsultant(Name name, int rate, int sickLeave, int vacation){
-        this.name = name;
+    	this.name = name;
         this.payRate = rate;
         this.sickLeave = sickLeave;
         this.vacation = vacation;
