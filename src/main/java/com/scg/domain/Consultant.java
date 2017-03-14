@@ -11,7 +11,8 @@ import com.scg.util.Name;
  * Created by chq-ruchic on 1/19/2017.
  */
 public class Consultant implements Comparable<Consultant>,Serializable {
-        Name name;
+     public   Name name;
+    public  Consultant(){};
     public Consultant(Name name){
         this.name = name;
     }

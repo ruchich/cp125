@@ -1,10 +1,15 @@
 package com.scg.beans;
 
+import com.scg.domain.Consultant;
 import com.scg.util.Name;
 
+import javax.swing.event.EventListenerList;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
+import java.beans.VetoableChangeListener;
 import java.io.Serializable;
+import java.util.EventListener;
 
 /**
  * Created by chq-ruchic on 3/10/2017.
@@ -13,18 +18,21 @@ import java.io.Serializable;
 public class StaffConsultant extends Consultant implements Serializable {
     
 	/** Pay rate property name. */
-  private static String PAY_RATE_PROPERTY_NAME;
+  private static String PAY_RATE_PROPERTY_NAME =  "payrate";
     /** Sick Leave property name. */
-    private static String SICK_LEAVE_HOURS_PROPERTY_NAME;
+    private static String SICK_LEAVE_HOURS_PROPERTY_NAME = "sickLeaveHours";
     /**Vacation hours property name.  */
-    private static String VACATION_HOURS_PROPERTY_NAME;
+    private static String VACATION_HOURS_PROPERTY_NAME = "vacationHours";
 
     private int payRate;
     private int sickLeave;
     private int vacation;
+    private EventListenerList mListenerList = new EventListenerList();
 
     /**Creates a new instance of StaffConsultant.*/
-    public void StaffConsultant(Name name, int rate, int sickLeave, int vacation){
+
+
+    public  StaffConsultant(Name name, int rate, int sickLeave, int vacation){
     	this.name = name;
         this.payRate = rate;
         this.sickLeave = sickLeave;
@@ -34,7 +42,7 @@ public class StaffConsultant extends Consultant implements Serializable {
      * Get the current pay rate.
      * @return the pay rate in cents*/
 
-    public int getRate() {
+    public int getPayRate() {
         return payRate;
     }
     /**
@@ -44,10 +52,62 @@ public class StaffConsultant extends Consultant implements Serializable {
      * */
     public void setPayRate(int payRate)throws PropertyVetoException {
         this.payRate = payRate;
-    }
-    public void addPropertyChangeListener(PropertyChangeListener l){
+
 
     }
+
+    /**
+     * Adds a general property change listener.
+     * @param l
+     */
+    public void addPropertyChangeListener(PropertyChangeListener l){
+        mListenerList.add(PropertyChangeListener.class,l);
+    }
+
+    /**
+     * Remove a general property change listener.
+     * @param l
+     */
+    public void removePropertyChangeListener(PropertyChangeListener l){
+        mListenerList.remove(PropertyChangeListener.class,l);
+    }
+
+    /**
+     * Adds a payRate property change listener.
+     * @param l
+     */
+
+    public void addPayRateListener(PropertyChangeListener l){
+        mListenerList.add(PropertyChangeListener.class,l);
+    }
+
+    /**
+     * Removes a payRate property change listener.
+     * @param l
+     */
+
+    public void removePayRateListener(PropertyChangeListener l){
+        mListenerList.remove(PropertyChangeListener.class,l);
+    }
+
+    /**
+     * Adds a vetoable change listener.
+     *
+     * @param l
+     */
+    public void addVetoableChangeListener(VetoableChangeListener l){
+        mListenerList.add(VetoableChangeListener.class, l);
+    }
+
+    /**
+     * Removes a vetoable change listener.
+     * @param l
+     */
+
+    public void removeVetoableChangeListener(VetoableChangeListener l){
+        mListenerList.remove(VetoableChangeListener.class,l);
+    }
+
     /**
      * Get the available sick leave.
      * @return the available sick leave hours
@@ -62,6 +122,23 @@ public class StaffConsultant extends Consultant implements Serializable {
      * */
     public void setSickLeave(int sickLeave) {
         this.sickLeave = sickLeave;
+    }
+
+    /**
+     * Adds a sickLeaveHours property change listener.
+     * @param l
+     */
+    public void addSickLeaveHoursListener(PropertyChangeListener l){
+         mListenerList.add(PropertyChangeListener.class,l);
+    }
+
+    /**
+     * Removes a sickLeaveHours property change listener.
+     * @param l
+     */
+
+    public void removeSickLeaveHoursListener(PropertyChangeListener l){
+        mListenerList.remove(PropertyChangeListener.class,l);
     }
     /**
      * Get the available vacation hours.
@@ -78,4 +155,23 @@ public class StaffConsultant extends Consultant implements Serializable {
     public void setVacation(int vacation) {
         this.vacation = vacation;
     }
+
+    /**
+     * Adds a vacationHours property change listener.
+     * @param l
+     */
+    public void addVacationHoursListener(PropertyChangeListener l){
+    mListenerList.add(PropertyChangeListener.class,l);
+    }
+
+    /**
+     * Removes a vacationHours property change listener.
+     * @param l
+     */
+    public void removeVacationHoursListener(PropertyChangeListener l){
+        mListenerList.remove(PropertyChangeListener.class,l);
+    }
+
+
+
 }
