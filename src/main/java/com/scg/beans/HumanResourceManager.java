@@ -2,13 +2,20 @@ package com.scg.beans;
 
 import com.scg.domain.Consultant;
 
+import java.beans.PropertyVetoException;
+
 import javax.swing.event.EventListenerList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *  @author parth
  *Responsible for modifying the pay rate and sick leave and vacation hours of staff consultants.
  */
 public final class HumanResourceManager {
+	/** This class' logger. */
+    static final Logger log = LoggerFactory.getLogger(HumanResourceManager.class);
 	/** The termination event listeners. */
 	private EventListenerList mListenerList = new EventListenerList();
 
@@ -20,7 +27,19 @@ public final class HumanResourceManager {
 	 * @param newPayRate - the new pay rate for the consultant
 	 */
 	public void adjustPayRate(StaffConsultant c,int newPayRate){
-		//c.setPayRate(newPayRate);
+		try{
+			if(log.isInfoEnabled()){
+		
+				final String msg = String.format("%% change = (%d -%2$d)/%2$d)", newPayRate, c.getPayRate(),((newPayRate - c.getPayRate())/(double)c.getPayRate()));
+			
+			log.info(msg);
+		}
+		c.setPayRate(newPayRate);
+		log.info("Approved pay adjustment for " + c.getName() );
+		}
+		catch (final PropertyVetoException pve){
+			log.info(" Denied pay adjustment for " + c.getName());
+		}
 	}
 	/**
 	 * Sets the sick leave hours for a staff consultant
@@ -43,7 +62,7 @@ public final class HumanResourceManager {
 	 * @param c - the consultant resigning
 	 */
 	public void acceptResignation(Consultant c){
-		fireVoluntaryTerminationEvent(new TerminationEvent(this,c,true) );
+		fireTerminationEvent(new TerminationEvent(this,c,true) );
 }
 
 	/**
@@ -52,7 +71,7 @@ public final class HumanResourceManager {
 	 */
 
 	public void terminate(Consultant c){
-		fireForcedTerminationEvent(new TerminationEvent(this,c,false) );
+		fireTerminationEvent(new TerminationEvent(this,c,false) );
 	}
 	/**
 	 * Adds a termination listener.
@@ -68,16 +87,15 @@ public final class HumanResourceManager {
 	public void removeTerminationListener(TerminationListener l){
 		mListenerList.remove(TerminationListener.class,l);
 	}
-	protected void fireForcedTerminationEvent(final TerminationEvent evnt) {
+	
+	private void fireTerminationEvent(final TerminationEvent evnt) {
 		TerminationListener[] listeners = mListenerList.getListeners(TerminationListener.class);
-		for (TerminationListener tL : listeners) {
-			tL.forcedTermination(evnt);
+		for (final TerminationListener listener : listeners) {
+			if(evnt.isVoluntary()){
+				listener.voluntaryTermination(evnt);
+				}else{
+			listener.forcedTermination(evnt);
 		}
 	}
-	protected void fireVoluntaryTerminationEvent(final TerminationEvent evnt) {
-		TerminationListener[] listeners = mListenerList.getListeners(TerminationListener.class);
-		for (TerminationListener tL : listeners) {
-			tL.forcedTermination(evnt);
-		}
 	}
 }

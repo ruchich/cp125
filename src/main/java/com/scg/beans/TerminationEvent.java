@@ -23,14 +23,9 @@ public class TerminationEvent extends java.util.EventObject {
      * @return boolean
      */
     public boolean isVoluntary(){
-        if (mVoluntary)
-            {return true;}
-        else
-        {
-           return false;
-
-        }
-    }
+        
+            return true;}
+        
 
     /**
      *Gets the consultant that was terminated.

@@ -1,5 +1,7 @@
 package com.scg.beans;
 
+import com.scg.util.Name;
+
 /**
  * The EEOC monitors SCG's terminations.
  */
@@ -26,7 +28,8 @@ public Eeoc(){};
      * @param evt
      */
     public void forcedTermination(TerminationEvent evt){
-        System.out.println("The consultant fired");
+    final	Name name = evt.getConsultant().getName();
+        System.out.println(name + "was fired");
         forcedTc++;
     }
 
