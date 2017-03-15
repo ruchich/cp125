@@ -20,7 +20,7 @@ import java.util.EventListener;
 public class StaffConsultant extends Consultant implements Serializable {
     
 	/** Pay rate property name. */
-    static String PAY_RATE_PROPERTY_NAME =  "payrate";
+    static String PAY_RATE_PROPERTY_NAME =  "payRate";
     /** Sick Leave property name. */
      static String SICK_LEAVE_HOURS_PROPERTY_NAME = "sickLeaveHours";
     /**Vacation hours property name.  */
@@ -126,7 +126,7 @@ public class StaffConsultant extends Consultant implements Serializable {
     }
     /**
      * Set the sick leave hours. Fires the ProperrtyChange event.
-     * @param  sickLeave - the available sick leave hours
+     * @param  sickLeaveHours - the available sick leave hours
      *
      * */
     public void setSickLeave(int sickLeaveHours) {
@@ -160,7 +160,7 @@ public class StaffConsultant extends Consultant implements Serializable {
     }
     /**
      * Set the sick vacation  hours. Fires the PropertyChange event.
-     * @param  vacation - the vacation hours
+     * @param  vacationHours - the vacation hours
      *
      * */
     public void setVacation(int vacationHours) {

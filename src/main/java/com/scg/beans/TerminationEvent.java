@@ -24,7 +24,7 @@ public class TerminationEvent extends java.util.EventObject {
      */
     public boolean isVoluntary(){
         
-            return true;}
+            return mVoluntary;}
         
 
     /**

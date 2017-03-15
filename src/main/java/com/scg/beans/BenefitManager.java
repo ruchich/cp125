@@ -21,6 +21,6 @@ public final class BenefitManager implements PropertyChangeListener {
      * @param evt - a property change event for the sickLeaveHours or vacationHours, or payRate property
      */
     public void propertyChange(PropertyChangeEvent evt){
-        log.info(evt.getPropertyName()+ "changed from"+ evt.getOldValue()+ "to" + evt.getNewValue() + "for" + ((StaffConsultant)evt.getSource()).getName());
+        log.info(evt.getPropertyName()+ "changed from "+ evt.getOldValue()+ " to " + evt.getNewValue() + " for " + ((StaffConsultant)evt.getSource()).getName());
     }
 }

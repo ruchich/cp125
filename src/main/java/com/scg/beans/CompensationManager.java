@@ -10,7 +10,7 @@ import java.beans.VetoableChangeListener;
 
 public final class CompensationManager implements PropertyChangeListener, VetoableChangeListener {
     /** This class' logger. */
-    static final Logger log = LoggerFactory.getLogger(CompensationManager.class);
+	private static final Logger log = LoggerFactory.getLogger(CompensationManager.class);
     /**
      * Maximum allowed raise, 5%
      */
@@ -29,7 +29,7 @@ public final class CompensationManager implements PropertyChangeListener, Vetoab
      */
     public void propertyChange(PropertyChangeEvent evt){
     	if( StaffConsultant.PAY_RATE_PROPERTY_NAME.equals(evt.getPropertyName())){
-    		final String msg = String.format("Pay Rate changed from %d to %d for %d", evt.getOldValue(),
+    		final String msg = String.format("Pay Rate changed from %d to %d for %s", evt.getOldValue(),
     				evt.getNewValue(),
     				((StaffConsultant)evt.getSource()).getName());
     		log.info(msg);
@@ -53,7 +53,7 @@ public final class CompensationManager implements PropertyChangeListener, Vetoab
     								evt.getOldValue(), evt.getNewValue(),
     								((StaffConsultant)evt.getSource()).getName());
     				log.info(msg);
-    				}
+    			}
     			throw new PropertyVetoException("Raise denied!", evt);
     		}
     			if(log.isInfoEnabled()){
@@ -63,7 +63,7 @@ public final class CompensationManager implements PropertyChangeListener, Vetoab
     								((StaffConsultant)evt.getSource()).getName());
     				log.info(msg);
     			
-    			}
+    		}
     		}
     		
     		

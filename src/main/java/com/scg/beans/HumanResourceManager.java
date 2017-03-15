@@ -3,6 +3,7 @@ package com.scg.beans;
 import com.scg.domain.Consultant;
 
 import java.beans.PropertyVetoException;
+import java.text.DecimalFormat;
 
 import javax.swing.event.EventListenerList;
 
@@ -15,7 +16,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class HumanResourceManager {
 	/** This class' logger. */
-    static final Logger log = LoggerFactory.getLogger(HumanResourceManager.class);
+   final Logger log = LoggerFactory.getLogger(HumanResourceManager.class);
 	/** The termination event listeners. */
 	private EventListenerList mListenerList = new EventListenerList();
 
@@ -29,8 +30,10 @@ public final class HumanResourceManager {
 	public void adjustPayRate(StaffConsultant c,int newPayRate){
 		try{
 			if(log.isInfoEnabled()){
-		
-				final String msg = String.format("%% change = (%d -%2$d)/%2$d)", newPayRate, c.getPayRate(),((newPayRate - c.getPayRate())/(double)c.getPayRate()));
+		double result = ((newPayRate - c.getPayRate())/(double)c.getPayRate());
+
+
+				final String msg = String.format("%% change = (%d-%d)/%d = %.6f ", newPayRate, c.getPayRate(),c.getPayRate(),result);
 			
 			log.info(msg);
 		}
@@ -93,7 +96,8 @@ public final class HumanResourceManager {
 		for (final TerminationListener listener : listeners) {
 			if(evnt.isVoluntary()){
 				listener.voluntaryTermination(evnt);
-				}else{
+				}
+				else{
 			listener.forcedTermination(evnt);
 		}
 	}

@@ -12,14 +12,15 @@ public final class Eeoc implements TerminationListener{
 /**
  * Constructor
  */
-public Eeoc(){};
+public Eeoc(){}
 
     /**
      * Simply prints a message indicating that the consultant quit.
       * @param evt
      */
     public void voluntaryTermination(TerminationEvent evt){
-  System.out.println("The consultant quit");
+        final	Name name = evt.getConsultant().getName();
+  System.out.println(name +" quit.");
         voluntaryTc++;
     }
 
@@ -29,7 +30,7 @@ public Eeoc(){};
      */
     public void forcedTermination(TerminationEvent evt){
     final	Name name = evt.getConsultant().getName();
-        System.out.println(name + "was fired");
+        System.out.println(name + " was fired.");
         forcedTc++;
     }
 
