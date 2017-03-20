@@ -52,12 +52,21 @@ public final class InitDb {
         		ps.executeUpdate();
                 
         	}
-        	//stmnt.executeUpdate( "INSERT INTO clients (name, street,CITY,state, postal_code,contact_last_name, contact_first_name, contact_middle_name)VALUES ('acme','Harrison Street','Redmond', 'WA','98052' ,'xx','yy','zz')");
-        	
+        	ps = conn.prepareStatement("INSERT INTO consultants (last_name, first_name, middle_name) VALUES (?, ?,?)");
+        	for(Consultant c:consultants){
+        		ps.setString(1,c.getName().getLastName());
+        		ps.setString(2,c.getName().getFirstName());
+        		ps.setString(3,c.getName().getMiddleName());
+        		ps.executeUpdate();
+        		
+        	}
+        	/* Select consultant id */
+        	rs = stmnt.executeQuery( "SELECT id FROM consultants  WHERE last_name = 'Architect'  AND first_name = 'Ann'  AND middle_name = 'S.'");
         	}  
         catch( SQLException ex )   {
         	System.out.println("Connection Failed");
         }
+        
 	}
 
 }
