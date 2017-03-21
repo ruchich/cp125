@@ -95,6 +95,7 @@ public final class InitDb {
 						ps.setInt(4, currentTime.getHours());
 						ps.executeUpdate();
 					}
+					/* Insert billable hours */
 				}
 			}
 
