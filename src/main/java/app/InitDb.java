@@ -65,13 +65,15 @@ public final class InitDb {
         	}
         	/* Insert time cards */
         	for(TimeCard t: timeCards) {
-				String lastName = t.getConsultant().getName().getLastName();
-				String firstName = t.getConsultant().getName().getFirstName();
-				String middleName = t.getConsultant().getName().getMiddleName();
-
+				
 			/* Select consultant id */
 
-				rs = stmnt.executeQuery("SELECT id FROM consultants  WHERE last_name = lastName  AND first_name = firstName  AND middle_name = middleName");
+				ps = conn.prepareStatement("SELECT id FROM consultants  WHERE last_name = ?  AND first_name = ?  AND middle_name = ?");
+				ps.setString(1, t.getConsultant().getName().getLastName());
+				ps.setString(2,t.getConsultant().getName().getFirstName() );
+				ps.setString(3,t.getConsultant().getName().getMiddleName() );
+				ps.execute();
+				rs = ps.getGeneratedKeys();
 				int consultant_id = rs.getInt("consultant_id");
 				String startDate = t.getWeekStartingDay().toString();
 
