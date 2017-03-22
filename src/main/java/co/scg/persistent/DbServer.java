@@ -6,16 +6,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Date;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+
 import java.util.List;
 
+import com.scg.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.scg.domain.ClientAccount;
-import com.scg.domain.Consultant;
-import com.scg.domain.Invoice;
-import com.scg.domain.TimeCard;
 import com.scg.util.Address;
 import com.scg.util.Name;
 import com.scg.util.StateCode;
@@ -38,10 +40,12 @@ public final class DbServer {
 	/* SQL for Inserting a CONSULTANT */
 	private static final String CONSULTANT_INSERT_SQL = " INSERT INTO consultants (last_name, first_name, middle_name)"
 													+ "VALUES (?, ?,?)";
+	/* SQL for selecting Consultant Id.*/
+	private static final String CONSULTANT_ID_SELECT_SQL = "SELECT id FROM consultants WHERE last_name = ?"
+												+ "AND first_name = ?  AND middle_name = ?";
+	/* SQL for selecting all clients.*/
 	
-/* SQL for selecting all clients.*/
-	
-	private static final String CONSULTANT_ALL_SELECT_SQL= "SELECT last_name, first_name, middle_name FROM consultants";
+	private static final String CONSULTANT_ALL_SELECT_SQL = "SELECT last_name, first_name, middle_name FROM consultants";
 	
 	/* SQL for Inserting a NON BILLABLE HOURS RECORD.*/
 	
@@ -53,6 +57,8 @@ public final class DbServer {
 	private static final String BILLABLE_HOURS_INSERT_SQL = 
 			"INSERT INTO billable_hours (client_id, timecard_id, date, skill,  hours)"
       +" VALUES ((SELECT DISTINCT id FROM clients WHERE name = ?),?, ?, ?,?)";
+
+	private static final String TIMECARD_INSERT_SQL = "INSERT INTO timecards (consultant_id, start_date) VALUES (?, ?)";
 	
 	/* SQL for SELECTING ALL THE INVOICE ITEMS FOR A CLIENT AND MONTH.*/
 	private static final String INVOICE_ITEMS_SELECT_SQL = "SELECT b.date, c.last_name, c.first_name, c.middle_name,"
@@ -90,7 +96,7 @@ public final class DbServer {
 	}
 	/**
 	 * Add a client to the database.
-	 * @param client - client - the client to add
+	 * @param c - client - the client to add
 	 * @throws SQLException - if any database operations fail
 	 */
 	public void addClient(ClientAccount c)
@@ -145,7 +151,7 @@ public final class DbServer {
 	}
 	/**
 	 * Add a consultant to the database.
-	 * @param consultant - - the consultant to add
+	 * @param  c - the consultant to add
 	 * @throws SQLException- if any database operations fail
 	 */
 	public void addConsultant(Consultant c)
@@ -170,9 +176,19 @@ public final class DbServer {
 	 */
 	public List<Consultant> getConsultants()
             throws SQLException{
-		
-		List <Consultant> listConsultant = new ArrayList<Consultant>();
-		return listConsultant;
+		try(Connection conn = DriverManager.getConnection( dbUrl, username, password )){
+			Statement stmnt = conn.createStatement();
+			ResultSet rs = stmnt.executeQuery(CLIENT_ALL_SELECT_SQL);
+			List <Consultant> listConsultant = new ArrayList<Consultant>();
+			while (rs.next()) {
+				final String lastName = rs.getString(1);
+				final String firstName = rs.getString(2);
+				final String middlename = rs.getString(3);
+				final Consultant consultant = new Consultant(new Name(lastName, firstName, middlename));
+				listConsultant.add(consultant);
+			}
+				return listConsultant;
+			}
 		
 	}
 	/**
@@ -182,8 +198,56 @@ public final class DbServer {
 	 */
 	public void addTimeCard(TimeCard timeCard)
             throws SQLException{
-		
-	}
+		try(Connection conn = DriverManager.getConnection( dbUrl, username, password )){
+			// get the consultant id
+			PreparedStatement ps =conn.prepareStatement(CONSULTANT_ID_SELECT_SQL);
+			ps.setString(1, timeCard.getConsultant().getName().getLastName());
+			ps.setString(2, timeCard.getConsultant().getName().getFirstName());
+			ps.setString(3, timeCard.getConsultant().getName().getMiddleName());
+			ResultSet rs =	 ps.executeQuery();
+			if(rs.next()){
+				final int consultantId = rs.getInt(1);
+				rs.close();
+				ps.close();
+				//Insert the timecard record
+				ps = conn.prepareStatement(TIMECARD_INSERT_SQL, Statement.RETURN_GENERATED_KEYS);
+				ps.setInt(1,consultantId);
+				long dateMillis = timeCard.getWeekStartingDay().atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
+				Date date = new Date(dateMillis);
+				ps.setDate(2, date);
+				ps.executeUpdate();
+				//get id of the generated row
+				rs = ps.getGeneratedKeys();
+				if(rs.next()){
+					final int timeCardId = rs.getInt(1);
+					final List<ConsultantTime> entries = timeCard.getConsultingHours();
+					PreparedStatement billableStmnt = conn.prepareStatement(BILLABLE_HOURS_INSERT_SQL);
+					PreparedStatement nonBillableStmnt  = conn.prepareStatement(NON_BILLABLE_HOURS_INSERT_SQL);
+					 for( ConsultantTime entry: entries){
+						 ps = (entry.isBillable())? billableStmnt : nonBillableStmnt;
+						 int indx = 1;
+						 ps.setString(indx++, entry.isBillable() ? entry.getAccount().getName() : ((NonBillableAccount)entry.getAccount()).name());
+						 ps.setInt(indx++, timeCardId);
+						 dateMillis = entry.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+						 ps.setDate(indx++, new Date(dateMillis));
+						 if(entry.isBillable()){
+							 ps.setString(indx++,entry.getSkill().name());
+						 }
+						 ps.setInt(indx++, entry.getHours());
+						 ps.addBatch();
+					 }
+					billableStmnt.executeBatch();
+					nonBillableStmnt.executeBatch();
+				}else{
+					log.error("Unable to locate inserted Timecard");
+
+					}
+			}else{
+				log.error("Unknown Client");
+			}
+		}
+
+		}
 	/**
 	 * Get clients monthly invoice.
 	 * @param client - the client to obtain the invoice line items for
@@ -196,8 +260,33 @@ public final class DbServer {
             java.time.Month month,
             int year)
      throws SQLException{
-		Invoice invoice = new Invoice(client, month, year);
-		
+		final Invoice invoice = new Invoice(client, month, year);
+		try(Connection conn = DriverManager.getConnection( dbUrl, username, password )) {
+			// get tinvoice line item
+			PreparedStatement ps = conn.prepareStatement(INVOICE_ITEMS_SELECT_SQL);
+			ps.setString(1, client.getName());
+			LocalDate iStartDate = invoice.getStartDate();
+			LocalDate iEndDate = iStartDate.plusMonths(1);
+			long datemillis = iStartDate.atStartOfDay(ZoneId.systemDefault()).toInstant().getEpochSecond();
+			ps.setDate(2, new Date(datemillis));
+			datemillis = iEndDate.atStartOfDay(ZoneId.systemDefault()).toInstant().getEpochSecond();
+			ps.setDate(3, new Date(datemillis));
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				final Date date = rs.getDate(1);
+				final String cLastName = rs.getString(2);
+				final String cFirstName = rs.getString(3);
+				final String cMiddleName = rs.getString(4);
+				final String skill = rs.getString(5);
+				final int hours = rs.getInt(7);
+				final Consultant consultant = new Consultant(new Name(cLastName, cFirstName, cMiddleName));
+				final Skill s = Skill.valueOf(skill);
+				LocalDate lDate = Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+				final InvoiceLineItem item = new InvoiceLineItem(lDate, consultant, s, hours);
+				invoice.addLineItem(item);
+
+			}
+		}
 		return invoice;
 	}
 

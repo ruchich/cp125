@@ -28,31 +28,16 @@ public final class InitDb {
         final List<Consultant> consultants = new ArrayList<Consultant>();
         final List<TimeCard> timeCards = new ArrayList<TimeCard>();
         ListFactory.populateLists(accounts, consultants, timeCards);
-        Statement stmnt;
-        PreparedStatement ps;
-        ResultSet rs;
+
+
         Connection conn = null;
         String db = "jdbc:derby://localhost:1527/memory:scgDb"; 
         String user = "student";
         String pass = "student";    
-        try     {     
-        	conn = DriverManager.getConnection( db, user, pass );  
-        	stmnt = conn.createStatement();
+
         	/* Insert client */ 
    // String query =	("INSERT INTO clients (name, street, city, state, postal_code,contact_last_name, contact_first_name, contact_middle_name)VALUES (?, ?, ?, ?, ?,?, ?, ?)");
-        	ps = conn.prepareStatement( "INSERT INTO clients (name, street, city, state, postal_code,contact_last_name, contact_first_name, contact_middle_name)VALUES (?, ?, ?, ?, ?,?, ?, ?)", Statement.RETURN_GENERATED_KEYS ); 
-        	for(ClientAccount c: accounts){
-        		ps.setString(1,c.getName());
-        		ps.setString(2, c.getAddress().getStreetNumber());
-        		ps.setString(3, c.getAddress().getCity());
-        		ps.setString(4, c.getAddress().getState().toString());
-        		ps.setString(5, c.getAddress().getPostalCode());
-        		ps.setString(6, c.getContact().getLastName());
-        		ps.setString(7, c.getContact().getFirstName());
-        		ps.setString(8,c.getContact().getMiddleName());
-        		ps.executeUpdate();
-                
-        	}
+
         	/* Insert consultant */
 			ps = conn.prepareStatement("INSERT INTO consultants (last_name, first_name, middle_name) VALUES (?, ?,?)");
         	for(Consultant c:consultants){
