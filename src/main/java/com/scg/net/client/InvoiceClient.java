@@ -1,10 +1,16 @@
 package com.scg.net.client;
 
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.scg.domain.ClientAccount;
 import com.scg.domain.TimeCard;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -12,6 +18,20 @@ import com.scg.domain.TimeCard;
  *The client of the InvoiceServer.
  */
 public class InvoiceClient {
+	/** start month*/
+	private static final Month INVOICE_MONTH = Month.MARCH;
+	/** test yr*/
+	private static final int INVOICE_YEAR = 2006;
+	/** This class' logger. */
+	private static final Logger log = LoggerFactory.getLogger("InvoiceClient");
+	/** List of TimeCards to send to the server*/
+	 List<TimeCard> timeCardList = new ArrayList<TimeCard>();
+	/** the host for the server.*/
+	String host;
+	/** the port for the server.*/
+	int port;
+	/** The socket. */
+	private Socket socket;
 
 	/**
 	 * Construct an InvoiceClient with a host and port for the server.
@@ -19,8 +39,11 @@ public class InvoiceClient {
 	 * 	@param port - the port for the server.
 	 * @param timeCardList - the list of timeCards to send to the server
 	 */
-	InvoiceClient(String host, int port, List<TimeCard> timeCardList) {
-		
+	public InvoiceClient(String host, int port, List<TimeCard> timeCardList)throws IOException {
+		this.host = host;
+		this.port = port;
+		this.timeCardList = timeCardList;
+		socket = new Socket(host, port);
 	}
 	/**
 	 * Runs this InvoiceClient, sending clients, consultants, and time cards to the server, then sending the command to create invoices for a specified month.
@@ -33,7 +56,7 @@ public class InvoiceClient {
 	 * @param out - the output stream connecting this client to the server.
 	 */
 	public void sendClients(ObjectOutputStream out){
-		
+
 	}
 	/**
 	 * Send the consultants to the server.
