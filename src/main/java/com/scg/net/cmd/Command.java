@@ -1,5 +1,7 @@
 package com.scg.net.cmd;
 
+import com.scg.net.server.CommandProcessor;
+
 import java.io.Serializable;
 
 /**
